@@ -6,8 +6,6 @@ const board = document.querySelector('wc-chess-board') as HTMLElement
 function calculate() {
   const childNodes = board.childNodes;
   
-  const a = document.querySelector('.square-88') as HTMLElement;
-  a.style.backgroundColor = 'red';
   const pieceNodes = Array.from(childNodes).filter(node => {
     if (node.nodeType === Node.ELEMENT_NODE) {
       const elementNode = node as Element;

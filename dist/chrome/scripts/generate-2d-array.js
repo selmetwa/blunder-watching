@@ -25,6 +25,7 @@ const fileMap = {
   7: 'g',
   8: 'h'
 };
+const playingAs = 'w';
 const generate2dArray = pieceNodes => {
   const pieces = Array.from(pieceNodes);
   console.log({
@@ -34,10 +35,10 @@ const generate2dArray = pieceNodes => {
     const classList = piece.classList;
     const pieceTypeInfo = classList[1];
     const pieceSquareInfo = classList[2].split('-')[1];
-    const pieceColor = pieceTypeInfo.charAt(0);
-    const pieceType = pieceTypeInfo.charAt(1);
-    const file = Number(pieceSquareInfo.charAt(0));
-    const rank = pieceSquareInfo.charAt(1);
+    const pieceColor = pieceTypeInfo?.charAt(0);
+    const pieceType = pieceTypeInfo?.charAt(1);
+    const file = Number(pieceSquareInfo?.charAt(0));
+    const rank = pieceSquareInfo?.charAt(1);
     const square = `${fileMap[file]}${rank}`;
     return {
       color: pieceColor,
@@ -82,21 +83,37 @@ const generate2dArray = pieceNodes => {
     for (let f = 0; f < 8; f++) {
       const square = chessboard[r][f];
       const {
-        attackers,
-        defenders
+        attackers: res
       } = (0,_generate_attackers__WEBPACK_IMPORTED_MODULE_0__.generateAttackers)(chessboard, square);
-      console.log({
-        square,
-        attackers,
-        defenders
-      });
+      if (square.color === 'w') {
+        const defenders = res.filter(attacker => attacker.color === 'w');
+        const attackers = res.filter(attacker => attacker.color === 'b');
+        chessboard[r][f].attackers = attackers;
+        chessboard[r][f].defenders = defenders;
+      }
+      if (square.color === 'b') {
+        const defenders = res.filter(attacker => attacker.color === 'b');
+        const attackers = res.filter(attacker => attacker.color === 'w');
+        chessboard[r][f].attackers = attackers;
+        chessboard[r][f].defenders = defenders;
+      }
+      if (square.color === null) {
+        if (playingAs === 'w') {
+          const defenders = res.filter(attacker => attacker.color === 'w');
+          const attackers = res.filter(attacker => attacker.color === 'b');
+          chessboard[r][f].attackers = attackers;
+          chessboard[r][f].defenders = defenders;
+        } else {
+          const defenders = res.filter(attacker => attacker.color === 'b');
+          const attackers = res.filter(attacker => attacker.color === 'w');
+          chessboard[r][f].attackers = attackers;
+          chessboard[r][f].defenders = defenders;
+        }
+      }
     }
   }
   console.log({
-    chessboard,
-    occupiedSquares,
-    emptySquares,
-    allSquaresWithPieces
+    chessboard
   });
 };
 
@@ -113,37 +130,213 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   generateAttackers: () => (/* binding */ generateAttackers)
 /* harmony export */ });
-/* harmony import */ var _pawn__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./pawn */ "./scripts/utils/pawn.ts");
+/* harmony import */ var _pieces_pawn__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./pieces/pawn */ "./scripts/utils/pieces/pawn.ts");
+/* harmony import */ var _pieces_knight__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./pieces/knight */ "./scripts/utils/pieces/knight.ts");
+/* harmony import */ var _pieces_bishop__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./pieces/bishop */ "./scripts/utils/pieces/bishop.ts");
+/* harmony import */ var _pieces_rook__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pieces/rook */ "./scripts/utils/pieces/rook.ts");
+/* harmony import */ var _pieces_queen__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./pieces/queen */ "./scripts/utils/pieces/queen.ts");
+/* harmony import */ var _pieces_king__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pieces/king */ "./scripts/utils/pieces/king.ts");
+
+
+
+
+
 
 const generateAttackers = (chessboard, targetSquare) => {
   const attackers = [];
-  const defenders = [];
   for (let r = 0; r < 8; r++) {
     for (let f = 0; f < 8; f++) {
       const square = chessboard[r][f];
       if (square.type === 'p') {
-        const attacksFromPawn = (0,_pawn__WEBPACK_IMPORTED_MODULE_0__.pawn)(chessboard, square, targetSquare);
-        if (attacksFromPawn?.type === 'attack') {
-          attackers.push(attacksFromPawn);
+        const res = (0,_pieces_pawn__WEBPACK_IMPORTED_MODULE_0__.pawn)(chessboard, square, targetSquare);
+        if (res) {
+          attackers.push(res);
         }
-        if (attacksFromPawn?.type === 'defend') {
-          defenders.push(attacksFromPawn);
+      }
+      if (square.type === 'n') {
+        const res = (0,_pieces_knight__WEBPACK_IMPORTED_MODULE_1__.knight)(chessboard, square, targetSquare);
+        if (res) {
+          attackers.push(res);
+        }
+      }
+      if (square.type === 'b') {
+        const res = (0,_pieces_bishop__WEBPACK_IMPORTED_MODULE_2__.bishop)(chessboard, square, targetSquare);
+        if (res) {
+          attackers.push(res);
+        }
+      }
+      if (square.type === 'r') {
+        const res = (0,_pieces_rook__WEBPACK_IMPORTED_MODULE_3__.rook)(chessboard, square, targetSquare);
+        if (res) {
+          attackers.push(res);
+        }
+      }
+      if (square.type === 'q') {
+        const res = (0,_pieces_queen__WEBPACK_IMPORTED_MODULE_4__.queen)(chessboard, square, targetSquare);
+        if (res) {
+          attackers.push(res);
+        }
+      }
+      if (square.type === 'k') {
+        const res = (0,_pieces_king__WEBPACK_IMPORTED_MODULE_5__.king)(chessboard, square, targetSquare);
+        if (res) {
+          attackers.push(res);
         }
       }
     }
   }
   return {
-    attackers,
-    defenders
+    attackers: attackers
   };
 };
 
 /***/ }),
 
-/***/ "./scripts/utils/pawn.ts":
-/*!*******************************!*\
-  !*** ./scripts/utils/pawn.ts ***!
-  \*******************************/
+/***/ "./scripts/utils/pieces/bishop.ts":
+/*!****************************************!*\
+  !*** ./scripts/utils/pieces/bishop.ts ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   bishop: () => (/* binding */ bishop)
+/* harmony export */ });
+const bishop = (board, bishop, targetSquare) => {
+  const {
+    row: bishopRow,
+    col: bishopCol
+  } = getSquarePosition(board, bishop);
+  const {
+    row: targetRow,
+    col: targetCol
+  } = getSquarePosition(board, targetSquare);
+  if (bishopRow === targetRow && bishopCol === targetCol) {
+    return null; // Bishop cannot move to its own square
+  }
+
+  // Check if target square is in the bishop's line of fire
+  const diffRow = Math.abs(bishopRow - targetRow);
+  const diffCol = Math.abs(bishopCol - targetCol);
+  if (diffRow === diffCol) {
+    // Determine the direction of movement
+    const rowDirection = targetRow > bishopRow ? 1 : -1;
+    const colDirection = targetCol > bishopCol ? 1 : -1;
+
+    // Iterate along the diagonal path from the bishop to the target square
+    for (let i = 1; i < diffRow; i++) {
+      const currentRow = bishopRow + i * rowDirection;
+      const currentCol = bishopCol + i * colDirection;
+      const currentSquare = board[currentRow][currentCol];
+
+      // Check for obstacles (non-empty squares) along the path
+      if (currentSquare.color !== null) {
+        return null; // Obstacle detected
+      }
+    }
+    return bishop; // No obstacles, target square is reachable
+  }
+  return null; // Target square is not reachable by bishop's movement
+};
+function getSquarePosition(board, square) {
+  for (let row = 0; row < board.length; row++) {
+    for (let col = 0; col < board[row].length; col++) {
+      if (board[row][col] === square) {
+        return {
+          row,
+          col
+        };
+      }
+    }
+  }
+  throw new Error('Square not found on the board.');
+}
+
+/***/ }),
+
+/***/ "./scripts/utils/pieces/king.ts":
+/*!**************************************!*\
+  !*** ./scripts/utils/pieces/king.ts ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   king: () => (/* binding */ king)
+/* harmony export */ });
+function getSquarePosition(board, square) {
+  for (let row = 0; row < board.length; row++) {
+    for (let col = 0; col < board[row].length; col++) {
+      if (board[row][col] === square) {
+        return {
+          row,
+          col
+        };
+      }
+    }
+  }
+  throw new Error('Square not found on the board.');
+}
+const king = (board, king, targetSquare) => {
+  const {
+    row: kingRow,
+    col: kingCol
+  } = getSquarePosition(board, king);
+  const {
+    row: targetRow,
+    col: targetCol
+  } = getSquarePosition(board, targetSquare);
+  if (kingRow === targetRow && kingCol === targetCol) {
+    return null; // King cannot move to its own square
+  }
+
+  // Check if target square is adjacent to the king
+  const diffRow = Math.abs(kingRow - targetRow);
+  const diffCol = Math.abs(kingCol - targetCol);
+  if (diffRow === 1 && diffCol === 0 || diffRow === 0 && diffCol === 1 || diffRow === 1 && diffCol === 1) {
+    return king; // Target square is adjacent, king can move there
+  }
+  return null; // Target square is not adjacent to the king
+};
+
+/***/ }),
+
+/***/ "./scripts/utils/pieces/knight.ts":
+/*!****************************************!*\
+  !*** ./scripts/utils/pieces/knight.ts ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   knight: () => (/* binding */ knight)
+/* harmony export */ });
+const knight = (chessboard, knight, targetSquare) => {
+  const [file, rank] = knight.square.split('');
+  const fileIndex = file?.charCodeAt(0) - 97;
+  const rankIndex = parseInt(rank) - 1;
+  const possibleMoves = [[rankIndex + 2, fileIndex + 1], [rankIndex + 2, fileIndex - 1], [rankIndex - 2, fileIndex + 1], [rankIndex - 2, fileIndex - 1], [rankIndex + 1, fileIndex + 2], [rankIndex + 1, fileIndex - 2], [rankIndex - 1, fileIndex + 2], [rankIndex - 1, fileIndex - 2]];
+  for (let i = 0; i < possibleMoves.length; i++) {
+    const [r, f] = possibleMoves[i];
+    if (r >= 0 && r < 8 && f >= 0 && f < 8) {
+      const square = chessboard[r][f];
+      if (square.square === targetSquare.square) {
+        return knight;
+      }
+    }
+  }
+  return null;
+};
+
+/***/ }),
+
+/***/ "./scripts/utils/pieces/pawn.ts":
+/*!**************************************!*\
+  !*** ./scripts/utils/pieces/pawn.ts ***!
+  \**************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -152,8 +345,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   pawn: () => (/* binding */ pawn)
 /* harmony export */ });
 const pawn = (chessboard, square, target) => {
-  // console.log({ chessboard, square, target })
-
   // white pawn
   if (square.color === 'w' && square.type === 'p') {
     const [file, rank] = square.square.split('');
@@ -162,33 +353,13 @@ const pawn = (chessboard, square, target) => {
     if (fileIndex > 0) {
       const leftSquare = chessboard[rankIndex + 1][fileIndex - 1];
       if (target.square === leftSquare.square) {
-        if (target.color === 'b') {
-          return {
-            square,
-            type: 'attack'
-          };
-        } else {
-          return {
-            square,
-            type: 'defend'
-          };
-        }
+        return square;
       }
     }
     if (fileIndex < 7) {
       const rightSquare = chessboard[rankIndex + 1][fileIndex + 1];
       if (target.square === rightSquare.square) {
-        if (target.color === 'b') {
-          return {
-            square,
-            type: 'attack'
-          };
-        } else {
-          return {
-            square,
-            type: 'defend'
-          };
-        }
+        return square;
       }
     }
   }
@@ -201,37 +372,146 @@ const pawn = (chessboard, square, target) => {
     if (fileIndex > 0) {
       const leftSquare = chessboard[rankIndex - 1][fileIndex - 1];
       if (target.square === leftSquare.square) {
-        if (target.color === 'w') {
-          return {
-            square,
-            type: 'attack'
-          };
-        } else {
-          return {
-            square,
-            type: 'defend'
-          };
-        }
+        return square;
       }
     }
     if (fileIndex < 7) {
       const rightSquare = chessboard[rankIndex - 1][fileIndex + 1];
       if (target.square === rightSquare.square) {
-        if (target.color === 'w') {
-          return {
-            square,
-            type: 'attack'
-          };
-        } else {
-          return {
-            square,
-            type: 'defend'
-          };
-        }
+        return square;
       }
     }
   }
   return null;
+};
+
+/***/ }),
+
+/***/ "./scripts/utils/pieces/queen.ts":
+/*!***************************************!*\
+  !*** ./scripts/utils/pieces/queen.ts ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   queen: () => (/* binding */ queen)
+/* harmony export */ });
+function getSquarePosition(board, square) {
+  for (let row = 0; row < board.length; row++) {
+    for (let col = 0; col < board[row].length; col++) {
+      if (board[row][col] === square) {
+        return {
+          row,
+          col
+        };
+      }
+    }
+  }
+  throw new Error('Square not found on the board.');
+}
+const queen = (board, queen, targetSquare) => {
+  const {
+    row: queenRow,
+    col: queenCol
+  } = getSquarePosition(board, queen);
+  const {
+    row: targetRow,
+    col: targetCol
+  } = getSquarePosition(board, targetSquare);
+  if (queenRow === targetRow && queenCol === targetCol) {
+    return null; // Queen cannot move to its own square
+  }
+
+  // Check if target square is reachable by queen's movement (vertical, horizontal, or diagonal)
+  const diffRow = Math.abs(queenRow - targetRow);
+  const diffCol = Math.abs(queenCol - targetCol);
+
+  // Check if target square is in the queen's line of fire (same row, same column, or same diagonal)
+  if (queenRow === targetRow || queenCol === targetCol || diffRow === diffCol) {
+    // Determine the direction of movement (vertical, horizontal, or diagonal)
+    const isVertical = queenRow !== targetRow;
+    const isDiagonal = diffRow === diffCol;
+    const direction = isVertical ? targetRow > queenRow ? 1 : -1 : isDiagonal ? targetRow > queenRow ? 1 : -1 : targetCol > queenCol ? 1 : -1;
+
+    // Iterate along the path from the queen to the target square
+    for (let i = 1; isVertical && queenRow + i * direction !== targetRow || !isVertical && !isDiagonal && queenCol + i * direction !== targetCol; i++) {
+      const currentRow = isVertical ? queenRow + i * direction : isDiagonal ? queenRow + i * direction : queenRow;
+      const currentCol = !isVertical ? queenCol + i * direction : isDiagonal ? queenCol + i * direction : queenCol;
+      const currentSquare = board[currentRow][currentCol];
+
+      // Check for obstacles (non-empty squares) along the path
+      if (currentSquare?.color !== null) {
+        return null; // Obstacle detected
+      }
+    }
+    return queen; // No obstacles, target square is reachable
+  }
+  return null; // Target square is not reachable by queen's movement
+};
+
+/***/ }),
+
+/***/ "./scripts/utils/pieces/rook.ts":
+/*!**************************************!*\
+  !*** ./scripts/utils/pieces/rook.ts ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   rook: () => (/* binding */ rook)
+/* harmony export */ });
+function getSquarePosition(board, square) {
+  for (let row = 0; row < board.length; row++) {
+    for (let col = 0; col < board[row].length; col++) {
+      if (board[row][col] === square) {
+        return {
+          row,
+          col
+        };
+      }
+    }
+  }
+  throw new Error('Square not found on the board.');
+}
+const rook = (board, rook, targetSquare) => {
+  const {
+    row: rookRow,
+    col: rookCol
+  } = getSquarePosition(board, rook);
+  const {
+    row: targetRow,
+    col: targetCol
+  } = getSquarePosition(board, targetSquare);
+  if (rookRow === targetRow && rookCol === targetCol) {
+    return null; // Rook cannot move to its own square
+  }
+
+  // Check if target square is in the rook's line of fire (same row or column)
+  if (rookRow === targetRow || rookCol === targetCol) {
+    // Determine the direction of movement (vertical or horizontal)
+    const isVertical = rookRow !== targetRow;
+
+    // Determine the direction of movement (+1 or -1)
+    const direction = isVertical ? targetRow > rookRow ? 1 : -1 : targetCol > rookCol ? 1 : -1;
+
+    // Iterate along the path from the rook to the target square
+    for (let i = 1; isVertical ? rookRow + i * direction !== targetRow : rookCol + i * direction !== targetCol; i++) {
+      const currentRow = isVertical ? rookRow + i * direction : rookRow;
+      const currentCol = isVertical ? rookCol : rookCol + i * direction;
+      const currentSquare = board[currentRow][currentCol];
+
+      // Check for obstacles (non-empty squares) along the path
+      if (currentSquare?.color !== null) {
+        return null; // Obstacle detected
+      }
+    }
+    return rook; // No obstacles, target square is reachable
+  }
+  return null; // Target square is not reachable by rook's movement
 };
 
 /***/ }),
@@ -3612,7 +3892,7 @@ if (true) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("77e534fd7a132481fc2b")
+/******/ 		__webpack_require__.h = () => ("af195c61fde9a53e2b5e")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
