@@ -1,6 +1,6 @@
-import { square } from "../../types";
+import { Square } from "../../types";
 
-export const knight = (chessboard: square[][], knight: square, targetSquare: square): square | null => {
+export const knight = (chessboard: Square[][], knight: Square, targetSquare: Square): Square | null => {
   const [file, rank] = knight.square.split('');
   const fileIndex = file?.charCodeAt(0) - 97;
   const rankIndex = parseInt(rank) - 1;

@@ -1,23 +1,5 @@
-type SquareType = 'p' | 'r' | 'n' | 'b' | 'q' | 'k' | 'e';
-type Square = {
-    color: string | null,
-    type: SquareType,
-    square: string,
-    attackers: Array<any>,
-    defenders: Array<any>,
-};
-type Chessboard = Square[][];
-
-function getSquarePosition(board: Chessboard, square: Square): { row: number, col: number } {
-  for (let row = 0; row < board.length; row++) {
-      for (let col = 0; col < board[row].length; col++) {
-          if (board[row][col] === square) {
-              return { row, col };
-          }
-      }
-  }
-  throw new Error('Square not found on the board.');
-}
+import { Chessboard, Square } from '../../types';
+import { getSquarePosition } from './helpers';
 
 export const queen = (board: Chessboard, queen: Square, targetSquare: Square): Square | null => {
   const { row: queenRow, col: queenCol } = getSquarePosition(board, queen);
@@ -26,7 +8,7 @@ export const queen = (board: Chessboard, queen: Square, targetSquare: Square): S
   if (queenRow === targetRow && queenCol === targetCol) {
       return null; // Queen cannot move to its own square
   }
-  
+
   // Check if target square is reachable by queen's movement (vertical, horizontal, or diagonal)
   const diffRow = Math.abs(queenRow - targetRow);
   const diffCol = Math.abs(queenCol - targetCol);

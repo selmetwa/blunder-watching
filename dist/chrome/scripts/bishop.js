@@ -12,15 +12,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   bishop: () => (/* binding */ bishop)
 /* harmony export */ });
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./helpers */ "./scripts/utils/pieces/helpers/index.ts");
+
 const bishop = (board, bishop, targetSquare) => {
   const {
     row: bishopRow,
     col: bishopCol
-  } = getSquarePosition(board, bishop);
+  } = (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.getSquarePosition)(board, bishop);
   const {
     row: targetRow,
     col: targetCol
-  } = getSquarePosition(board, targetSquare);
+  } = (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.getSquarePosition)(board, targetSquare);
   if (bishopRow === targetRow && bishopCol === targetCol) {
     return null; // Bishop cannot move to its own square
   }
@@ -48,7 +50,21 @@ const bishop = (board, bishop, targetSquare) => {
   }
   return null; // Target square is not reachable by bishop's movement
 };
-function getSquarePosition(board, square) {
+
+/***/ }),
+
+/***/ "./scripts/utils/pieces/helpers/index.ts":
+/*!***********************************************!*\
+  !*** ./scripts/utils/pieces/helpers/index.ts ***!
+  \***********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   getSquarePosition: () => (/* binding */ getSquarePosition)
+/* harmony export */ });
+const getSquarePosition = (board, square) => {
   for (let row = 0; row < board.length; row++) {
     for (let col = 0; col < board[row].length; col++) {
       if (board[row][col] === square) {
@@ -60,7 +76,7 @@ function getSquarePosition(board, square) {
     }
   }
   throw new Error('Square not found on the board.');
-}
+};
 
 /***/ }),
 
@@ -3440,7 +3456,7 @@ if (true) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("af195c61fde9a53e2b5e")
+/******/ 		__webpack_require__.h = () => ("0d8a428ca17f55c2c3e8")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */

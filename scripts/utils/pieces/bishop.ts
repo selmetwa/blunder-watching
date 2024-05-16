@@ -1,12 +1,5 @@
-type SquareType = 'p' | 'r' | 'n' | 'b' | 'q' | 'k' | 'e';
-type Square = {
-    color: string | null,
-    type: SquareType,
-    square: string,
-    attackers: Array<any>,
-    defenders: Array<any>,
-};
-type Chessboard = Square[][];
+import { Chessboard, Square } from '../../types';
+import { getSquarePosition } from './helpers';
 
 export const bishop = (board: Chessboard, bishop: Square, targetSquare: Square): Square | null => {
   const { row: bishopRow, col: bishopCol } = getSquarePosition(board, bishop);
@@ -43,13 +36,3 @@ export const bishop = (board: Chessboard, bishop: Square, targetSquare: Square):
   return null; // Target square is not reachable by bishop's movement
 }
 
-function getSquarePosition(board: Chessboard, square: Square): { row: number, col: number } {
-    for (let row = 0; row < board.length; row++) {
-        for (let col = 0; col < board[row].length; col++) {
-            if (board[row][col] === square) {
-                return { row, col };
-            }
-        }
-    }
-    throw new Error('Square not found on the board.');
-}

@@ -85,15 +85,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   bishop: () => (/* binding */ bishop)
 /* harmony export */ });
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./helpers */ "./scripts/utils/pieces/helpers/index.ts");
+
 const bishop = (board, bishop, targetSquare) => {
   const {
     row: bishopRow,
     col: bishopCol
-  } = getSquarePosition(board, bishop);
+  } = (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.getSquarePosition)(board, bishop);
   const {
     row: targetRow,
     col: targetCol
-  } = getSquarePosition(board, targetSquare);
+  } = (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.getSquarePosition)(board, targetSquare);
   if (bishopRow === targetRow && bishopCol === targetCol) {
     return null; // Bishop cannot move to its own square
   }
@@ -121,7 +123,21 @@ const bishop = (board, bishop, targetSquare) => {
   }
   return null; // Target square is not reachable by bishop's movement
 };
-function getSquarePosition(board, square) {
+
+/***/ }),
+
+/***/ "./scripts/utils/pieces/helpers/index.ts":
+/*!***********************************************!*\
+  !*** ./scripts/utils/pieces/helpers/index.ts ***!
+  \***********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   getSquarePosition: () => (/* binding */ getSquarePosition)
+/* harmony export */ });
+const getSquarePosition = (board, square) => {
   for (let row = 0; row < board.length; row++) {
     for (let col = 0; col < board[row].length; col++) {
       if (board[row][col] === square) {
@@ -133,7 +149,7 @@ function getSquarePosition(board, square) {
     }
   }
   throw new Error('Square not found on the board.');
-}
+};
 
 /***/ }),
 
@@ -148,28 +164,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   king: () => (/* binding */ king)
 /* harmony export */ });
-function getSquarePosition(board, square) {
-  for (let row = 0; row < board.length; row++) {
-    for (let col = 0; col < board[row].length; col++) {
-      if (board[row][col] === square) {
-        return {
-          row,
-          col
-        };
-      }
-    }
-  }
-  throw new Error('Square not found on the board.');
-}
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./helpers */ "./scripts/utils/pieces/helpers/index.ts");
+
 const king = (board, king, targetSquare) => {
   const {
     row: kingRow,
     col: kingCol
-  } = getSquarePosition(board, king);
+  } = (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.getSquarePosition)(board, king);
   const {
     row: targetRow,
     col: targetCol
-  } = getSquarePosition(board, targetSquare);
+  } = (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.getSquarePosition)(board, targetSquare);
   if (kingRow === targetRow && kingCol === targetCol) {
     return null; // King cannot move to its own square
   }
@@ -226,41 +231,41 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   pawn: () => (/* binding */ pawn)
 /* harmony export */ });
-const pawn = (chessboard, square, target) => {
+const pawn = (chessboard, pawn, target) => {
   // white pawn
-  if (square.color === 'w' && square.type === 'p') {
-    const [file, rank] = square.square.split('');
+  if (pawn.color === 'w' && pawn.type === 'p') {
+    const [file, rank] = pawn.square.split('');
     const fileIndex = file.charCodeAt(0) - 97;
     const rankIndex = parseInt(rank) - 1;
     if (fileIndex > 0) {
       const leftSquare = chessboard[rankIndex + 1][fileIndex - 1];
       if (target.square === leftSquare.square) {
-        return square;
+        return pawn;
       }
     }
     if (fileIndex < 7) {
       const rightSquare = chessboard[rankIndex + 1][fileIndex + 1];
       if (target.square === rightSquare.square) {
-        return square;
+        return pawn;
       }
     }
   }
 
   // black pawn
-  if (square.color === 'b' && square.type === 'p') {
-    const [file, rank] = square.square.split('');
+  if (pawn.color === 'b' && pawn.type === 'p') {
+    const [file, rank] = pawn.square.split('');
     const fileIndex = file.charCodeAt(0) - 97;
     const rankIndex = parseInt(rank) - 1;
     if (fileIndex > 0) {
       const leftSquare = chessboard[rankIndex - 1][fileIndex - 1];
       if (target.square === leftSquare.square) {
-        return square;
+        return pawn;
       }
     }
     if (fileIndex < 7) {
       const rightSquare = chessboard[rankIndex - 1][fileIndex + 1];
       if (target.square === rightSquare.square) {
-        return square;
+        return pawn;
       }
     }
   }
@@ -280,28 +285,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   queen: () => (/* binding */ queen)
 /* harmony export */ });
-function getSquarePosition(board, square) {
-  for (let row = 0; row < board.length; row++) {
-    for (let col = 0; col < board[row].length; col++) {
-      if (board[row][col] === square) {
-        return {
-          row,
-          col
-        };
-      }
-    }
-  }
-  throw new Error('Square not found on the board.');
-}
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./helpers */ "./scripts/utils/pieces/helpers/index.ts");
+
 const queen = (board, queen, targetSquare) => {
   const {
     row: queenRow,
     col: queenCol
-  } = getSquarePosition(board, queen);
+  } = (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.getSquarePosition)(board, queen);
   const {
     row: targetRow,
     col: targetCol
-  } = getSquarePosition(board, targetSquare);
+  } = (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.getSquarePosition)(board, targetSquare);
   if (queenRow === targetRow && queenCol === targetCol) {
     return null; // Queen cannot move to its own square
   }
@@ -346,28 +340,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   rook: () => (/* binding */ rook)
 /* harmony export */ });
-function getSquarePosition(board, square) {
-  for (let row = 0; row < board.length; row++) {
-    for (let col = 0; col < board[row].length; col++) {
-      if (board[row][col] === square) {
-        return {
-          row,
-          col
-        };
-      }
-    }
-  }
-  throw new Error('Square not found on the board.');
-}
+/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./helpers */ "./scripts/utils/pieces/helpers/index.ts");
+
 const rook = (board, rook, targetSquare) => {
   const {
     row: rookRow,
     col: rookCol
-  } = getSquarePosition(board, rook);
+  } = (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.getSquarePosition)(board, rook);
   const {
     row: targetRow,
     col: targetCol
-  } = getSquarePosition(board, targetSquare);
+  } = (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.getSquarePosition)(board, targetSquare);
   if (rookRow === targetRow && rookCol === targetCol) {
     return null; // Rook cannot move to its own square
   }
@@ -3774,7 +3757,7 @@ if (true) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("af195c61fde9a53e2b5e")
+/******/ 		__webpack_require__.h = () => ("0d8a428ca17f55c2c3e8")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */

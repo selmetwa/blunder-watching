@@ -12,41 +12,41 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   pawn: () => (/* binding */ pawn)
 /* harmony export */ });
-const pawn = (chessboard, square, target) => {
+const pawn = (chessboard, pawn, target) => {
   // white pawn
-  if (square.color === 'w' && square.type === 'p') {
-    const [file, rank] = square.square.split('');
+  if (pawn.color === 'w' && pawn.type === 'p') {
+    const [file, rank] = pawn.square.split('');
     const fileIndex = file.charCodeAt(0) - 97;
     const rankIndex = parseInt(rank) - 1;
     if (fileIndex > 0) {
       const leftSquare = chessboard[rankIndex + 1][fileIndex - 1];
       if (target.square === leftSquare.square) {
-        return square;
+        return pawn;
       }
     }
     if (fileIndex < 7) {
       const rightSquare = chessboard[rankIndex + 1][fileIndex + 1];
       if (target.square === rightSquare.square) {
-        return square;
+        return pawn;
       }
     }
   }
 
   // black pawn
-  if (square.color === 'b' && square.type === 'p') {
-    const [file, rank] = square.square.split('');
+  if (pawn.color === 'b' && pawn.type === 'p') {
+    const [file, rank] = pawn.square.split('');
     const fileIndex = file.charCodeAt(0) - 97;
     const rankIndex = parseInt(rank) - 1;
     if (fileIndex > 0) {
       const leftSquare = chessboard[rankIndex - 1][fileIndex - 1];
       if (target.square === leftSquare.square) {
-        return square;
+        return pawn;
       }
     }
     if (fileIndex < 7) {
       const rightSquare = chessboard[rankIndex - 1][fileIndex + 1];
       if (target.square === rightSquare.square) {
-        return square;
+        return pawn;
       }
     }
   }
@@ -3431,7 +3431,7 @@ if (true) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("af195c61fde9a53e2b5e")
+/******/ 		__webpack_require__.h = () => ("0d8a428ca17f55c2c3e8")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
