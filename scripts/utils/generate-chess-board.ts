@@ -48,7 +48,10 @@ export const generateChessboard = (pieceNodes: ChildNode[]): Chessboard => {
       const [file, rank] = square.split(''); // Reverse the square string to match array indexing
       const fileIndex = file.charCodeAt(0) - 97; // Convert file to array index (a=0, b=1, ..., h=7)
       const rankIndex = parseInt(rank) - 1; // Convert rank to array index (1=0, 2=1, ..., 8=7)
-      chessboard[rankIndex][fileIndex] = { color, type, square, attackers, defenders };
+
+      if (chessboard?.[rankIndex]?.[fileIndex] !== undefined) {
+        chessboard[rankIndex][fileIndex] = { color, type, square, attackers, defenders };
+      }
   });
 
 
@@ -57,31 +60,33 @@ export const generateChessboard = (pieceNodes: ChildNode[]): Chessboard => {
       const square = chessboard[r][f];
       const { attackers: res } = generateAttackers(chessboard, square);
 
-      if (square.color === 'w') {
-        const defenders = res.filter(attacker => attacker.color === 'w');
-        const attackers = res.filter(attacker => attacker.color === 'b');
-        chessboard[r][f].attackers = attackers;
-        chessboard[r][f].defenders = defenders;
-      }
-
-      if (square.color === 'b') {
-        const defenders = res.filter(attacker => attacker.color === 'b');
-        const attackers = res.filter(attacker => attacker.color === 'w');
-        chessboard[r][f].attackers = attackers;
-        chessboard[r][f].defenders = defenders;
-      }
-
-      if (square.color === null) {
-        if (playingAs === 'w') {
+      if (chessboard?.[r]?.[f] !== undefined) {
+        if (square.color === 'w') {
           const defenders = res.filter(attacker => attacker.color === 'w');
           const attackers = res.filter(attacker => attacker.color === 'b');
           chessboard[r][f].attackers = attackers;
           chessboard[r][f].defenders = defenders;
-        } else {
+        }
+  
+        if (square.color === 'b') {
           const defenders = res.filter(attacker => attacker.color === 'b');
           const attackers = res.filter(attacker => attacker.color === 'w');
           chessboard[r][f].attackers = attackers;
           chessboard[r][f].defenders = defenders;
+        }
+  
+        if (square.color === null) {
+          if (playingAs === 'w') {
+            const defenders = res.filter(attacker => attacker.color === 'w');
+            const attackers = res.filter(attacker => attacker.color === 'b');
+            chessboard[r][f].attackers = attackers;
+            chessboard[r][f].defenders = defenders;
+          } else {
+            const defenders = res.filter(attacker => attacker.color === 'b');
+            const attackers = res.filter(attacker => attacker.color === 'w');
+            chessboard[r][f].attackers = attackers;
+            chessboard[r][f].defenders = defenders;
+          }
         }
       }
     }

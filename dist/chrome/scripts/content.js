@@ -49,11 +49,13 @@ const playingAs = 'w';
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_generate_chess_board__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils/generate-chess-board */ "./scripts/utils/generate-chess-board.ts");
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./constants */ "./scripts/constants.ts");
 if (true) {
   module.hot.accept();
 }
 ;
 console.log("content script loaded!");
+
 
 const board = document.querySelector('wc-chess-board');
 let classString = '';
@@ -66,7 +68,7 @@ function findStringDifference(str1, str2) {
   }
   return diff;
 }
-function calculate() {
+function calculate(pieceMoved = '') {
   const childNodes = board && board.childNodes;
   if (!childNodes) {
     return;
@@ -79,29 +81,41 @@ function calculate() {
     return false;
   });
   const _classString = pieceNodes.map(node => `${node.classList[1]}_${node.classList[2]}`).join('_');
-  console.log({
-    classString,
-    _classString
-  });
   classString = _classString;
   const chessboard = (0,_utils_generate_chess_board__WEBPACK_IMPORTED_MODULE_0__.generateChessboard)(pieceNodes);
   const flatChessboard = chessboard.flat();
   for (const square of flatChessboard) {
-    console.log({
-      obj: square,
-      square: square.square,
-      defenders: square.defenders.length,
-      attackers: square.attackers.length
+    const [file, rank] = square && square.square && square?.square?.split('') || [];
+    const selector = `.square-${_constants__WEBPACK_IMPORTED_MODULE_1__.fileLetterToNumberMap[file]}${rank}`;
+    const squareElements = document.querySelectorAll(selector);
+    squareElements.forEach(squareElement => {
+      const children = squareElement?.querySelectorAll('.attackers-defenders');
+      children?.forEach(child => {
+        squareElement?.removeChild(child);
+      });
+      if (squareElement) {
+        const childDiv = document.createElement('div');
+        childDiv.classList.add('attackers-defenders');
+        const childText = document.createElement('p');
+        childText.innerText = `d: ${square.defenders.length}, a: ${square.attackers.length}`;
+        childDiv.appendChild(childText);
+        squareElement.appendChild(childDiv);
+      }
     });
   }
-  console.log({
-    chessboard
-  });
+  if (pieceMoved) {
+    const joinedSelector = pieceMoved.split(' ').join('.');
+    const pieceMovedElement = document.querySelector(`.${joinedSelector}`);
+    if (pieceMovedElement) {
+      const children = pieceMovedElement?.querySelectorAll('.attackers-defenders');
+      children?.forEach(child => {
+        pieceMovedElement?.removeChild(child);
+      });
+    }
+  }
 }
-setTimeout(() => {
-  calculate();
-}, 1000);
-function testing() {
+calculate();
+function testing(pieceMoved) {
   const childNodes = board && board.childNodes;
   if (!childNodes) {
     return;
@@ -117,7 +131,7 @@ function testing() {
   const diff = findStringDifference(classString, _classString);
   if (!!diff.trim()) {
     classString = _classString;
-    calculate();
+    calculate(pieceMoved);
   }
 }
 const observer = new MutationObserver(mutationsList => {
@@ -126,7 +140,7 @@ const observer = new MutationObserver(mutationsList => {
       if (mutation.attributeName === 'class') {
         const targetNode = mutation.target;
         if (targetNode.classList.contains('piece') && !targetNode.classList.contains('dragging')) {
-          testing();
+          testing(targetNode.classList.value);
         }
       }
     }
@@ -171,40 +185,42 @@ const generateAttackers = (chessboard, targetSquare) => {
   for (let r = 0; r < 8; r++) {
     for (let f = 0; f < 8; f++) {
       const square = chessboard[r][f];
-      if (square.type === 'p') {
-        const res = (0,_pieces_pawn__WEBPACK_IMPORTED_MODULE_0__.pawn)(chessboard, square, targetSquare);
-        if (res) {
-          attackers.push(res);
+      if (square) {
+        if (square.type === 'p') {
+          const res = (0,_pieces_pawn__WEBPACK_IMPORTED_MODULE_0__.pawn)(chessboard, square, targetSquare);
+          if (res) {
+            attackers.push(res);
+          }
         }
-      }
-      if (square.type === 'n') {
-        const res = (0,_pieces_knight__WEBPACK_IMPORTED_MODULE_1__.knight)(chessboard, square, targetSquare);
-        if (res) {
-          attackers.push(res);
+        if (square.type === 'n') {
+          const res = (0,_pieces_knight__WEBPACK_IMPORTED_MODULE_1__.knight)(chessboard, square, targetSquare);
+          if (res) {
+            attackers.push(res);
+          }
         }
-      }
-      if (square.type === 'b') {
-        const res = (0,_pieces_bishop__WEBPACK_IMPORTED_MODULE_2__.bishop)(chessboard, square, targetSquare);
-        if (res) {
-          attackers.push(res);
+        if (square.type === 'b') {
+          const res = (0,_pieces_bishop__WEBPACK_IMPORTED_MODULE_2__.bishop)(chessboard, square, targetSquare);
+          if (res) {
+            attackers.push(res);
+          }
         }
-      }
-      if (square.type === 'r') {
-        const res = (0,_pieces_rook__WEBPACK_IMPORTED_MODULE_3__.rook)(chessboard, square, targetSquare);
-        if (res) {
-          attackers.push(res);
+        if (square.type === 'r') {
+          const res = (0,_pieces_rook__WEBPACK_IMPORTED_MODULE_3__.rook)(chessboard, square, targetSquare);
+          if (res) {
+            attackers.push(res);
+          }
         }
-      }
-      if (square.type === 'q') {
-        const res = (0,_pieces_queen__WEBPACK_IMPORTED_MODULE_4__.queen)(chessboard, square, targetSquare);
-        if (res) {
-          attackers.push(res);
+        if (square.type === 'q') {
+          const res = (0,_pieces_queen__WEBPACK_IMPORTED_MODULE_4__.queen)(chessboard, square, targetSquare);
+          if (res) {
+            attackers.push(res);
+          }
         }
-      }
-      if (square.type === 'k') {
-        const res = (0,_pieces_king__WEBPACK_IMPORTED_MODULE_5__.king)(chessboard, square, targetSquare);
-        if (res) {
-          attackers.push(res);
+        if (square.type === 'k') {
+          const res = (0,_pieces_king__WEBPACK_IMPORTED_MODULE_5__.king)(chessboard, square, targetSquare);
+          if (res) {
+            attackers.push(res);
+          }
         }
       }
     }
@@ -273,13 +289,16 @@ const generateChessboard = pieceNodes => {
     const [file, rank] = square.split(''); // Reverse the square string to match array indexing
     const fileIndex = file.charCodeAt(0) - 97; // Convert file to array index (a=0, b=1, ..., h=7)
     const rankIndex = parseInt(rank) - 1; // Convert rank to array index (1=0, 2=1, ..., 8=7)
-    chessboard[rankIndex][fileIndex] = {
-      color,
-      type,
-      square,
-      attackers,
-      defenders
-    };
+
+    if (chessboard?.[rankIndex]?.[fileIndex] !== undefined) {
+      chessboard[rankIndex][fileIndex] = {
+        color,
+        type,
+        square,
+        attackers,
+        defenders
+      };
+    }
   });
   for (let r = 0; r < 8; r++) {
     for (let f = 0; f < 8; f++) {
@@ -287,29 +306,31 @@ const generateChessboard = pieceNodes => {
       const {
         attackers: res
       } = (0,_generate_attackers__WEBPACK_IMPORTED_MODULE_1__.generateAttackers)(chessboard, square);
-      if (square.color === 'w') {
-        const defenders = res.filter(attacker => attacker.color === 'w');
-        const attackers = res.filter(attacker => attacker.color === 'b');
-        chessboard[r][f].attackers = attackers;
-        chessboard[r][f].defenders = defenders;
-      }
-      if (square.color === 'b') {
-        const defenders = res.filter(attacker => attacker.color === 'b');
-        const attackers = res.filter(attacker => attacker.color === 'w');
-        chessboard[r][f].attackers = attackers;
-        chessboard[r][f].defenders = defenders;
-      }
-      if (square.color === null) {
-        if (_constants__WEBPACK_IMPORTED_MODULE_0__.playingAs === 'w') {
+      if (chessboard?.[r]?.[f] !== undefined) {
+        if (square.color === 'w') {
           const defenders = res.filter(attacker => attacker.color === 'w');
           const attackers = res.filter(attacker => attacker.color === 'b');
           chessboard[r][f].attackers = attackers;
           chessboard[r][f].defenders = defenders;
-        } else {
+        }
+        if (square.color === 'b') {
           const defenders = res.filter(attacker => attacker.color === 'b');
           const attackers = res.filter(attacker => attacker.color === 'w');
           chessboard[r][f].attackers = attackers;
           chessboard[r][f].defenders = defenders;
+        }
+        if (square.color === null) {
+          if (_constants__WEBPACK_IMPORTED_MODULE_0__.playingAs === 'w') {
+            const defenders = res.filter(attacker => attacker.color === 'w');
+            const attackers = res.filter(attacker => attacker.color === 'b');
+            chessboard[r][f].attackers = attackers;
+            chessboard[r][f].defenders = defenders;
+          } else {
+            const defenders = res.filter(attacker => attacker.color === 'b');
+            const attackers = res.filter(attacker => attacker.color === 'w');
+            chessboard[r][f].attackers = attackers;
+            chessboard[r][f].defenders = defenders;
+          }
         }
       }
     }
@@ -4002,7 +4023,7 @@ if (true) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("0d8a428ca17f55c2c3e8")
+/******/ 		__webpack_require__.h = () => ("85d99fe579aff5f8faa7")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */

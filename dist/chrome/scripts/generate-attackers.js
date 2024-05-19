@@ -29,40 +29,42 @@ const generateAttackers = (chessboard, targetSquare) => {
   for (let r = 0; r < 8; r++) {
     for (let f = 0; f < 8; f++) {
       const square = chessboard[r][f];
-      if (square.type === 'p') {
-        const res = (0,_pieces_pawn__WEBPACK_IMPORTED_MODULE_0__.pawn)(chessboard, square, targetSquare);
-        if (res) {
-          attackers.push(res);
+      if (square) {
+        if (square.type === 'p') {
+          const res = (0,_pieces_pawn__WEBPACK_IMPORTED_MODULE_0__.pawn)(chessboard, square, targetSquare);
+          if (res) {
+            attackers.push(res);
+          }
         }
-      }
-      if (square.type === 'n') {
-        const res = (0,_pieces_knight__WEBPACK_IMPORTED_MODULE_1__.knight)(chessboard, square, targetSquare);
-        if (res) {
-          attackers.push(res);
+        if (square.type === 'n') {
+          const res = (0,_pieces_knight__WEBPACK_IMPORTED_MODULE_1__.knight)(chessboard, square, targetSquare);
+          if (res) {
+            attackers.push(res);
+          }
         }
-      }
-      if (square.type === 'b') {
-        const res = (0,_pieces_bishop__WEBPACK_IMPORTED_MODULE_2__.bishop)(chessboard, square, targetSquare);
-        if (res) {
-          attackers.push(res);
+        if (square.type === 'b') {
+          const res = (0,_pieces_bishop__WEBPACK_IMPORTED_MODULE_2__.bishop)(chessboard, square, targetSquare);
+          if (res) {
+            attackers.push(res);
+          }
         }
-      }
-      if (square.type === 'r') {
-        const res = (0,_pieces_rook__WEBPACK_IMPORTED_MODULE_3__.rook)(chessboard, square, targetSquare);
-        if (res) {
-          attackers.push(res);
+        if (square.type === 'r') {
+          const res = (0,_pieces_rook__WEBPACK_IMPORTED_MODULE_3__.rook)(chessboard, square, targetSquare);
+          if (res) {
+            attackers.push(res);
+          }
         }
-      }
-      if (square.type === 'q') {
-        const res = (0,_pieces_queen__WEBPACK_IMPORTED_MODULE_4__.queen)(chessboard, square, targetSquare);
-        if (res) {
-          attackers.push(res);
+        if (square.type === 'q') {
+          const res = (0,_pieces_queen__WEBPACK_IMPORTED_MODULE_4__.queen)(chessboard, square, targetSquare);
+          if (res) {
+            attackers.push(res);
+          }
         }
-      }
-      if (square.type === 'k') {
-        const res = (0,_pieces_king__WEBPACK_IMPORTED_MODULE_5__.king)(chessboard, square, targetSquare);
-        if (res) {
-          attackers.push(res);
+        if (square.type === 'k') {
+          const res = (0,_pieces_king__WEBPACK_IMPORTED_MODULE_5__.king)(chessboard, square, targetSquare);
+          if (res) {
+            attackers.push(res);
+          }
         }
       }
     }
@@ -3757,7 +3759,7 @@ if (true) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("0d8a428ca17f55c2c3e8")
+/******/ 		__webpack_require__.h = () => ("85d99fe579aff5f8faa7")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */

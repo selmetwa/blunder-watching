@@ -16,7 +16,7 @@ function findStringDifference(str1: string, str2: string) {
   return diff;
 }
 
-function calculate() {
+function calculate(pieceMoved = '') {
   const childNodes = board && board.childNodes;
 
   if (!childNodes) {
@@ -32,30 +32,50 @@ function calculate() {
   });
 
   const _classString = pieceNodes.map(node => `${node.classList[1]}_${node.classList[2]}`).join('_');
-  console.log({ classString, _classString })
-
   classString = _classString;
 
   const chessboard = generateChessboard(pieceNodes);
   const flatChessboard = chessboard.flat();
+
   for (const square of flatChessboard) {
+    const [file, rank] = square && square.square && square?.square?.split('') || [];
+    const selector = `.square-${fileLetterToNumberMap[file]}${rank}`;
+    const squareElements = document.querySelectorAll(selector);
 
-
-    console.log({
-      obj: square,
-      square: square.square,
-      defenders: square.defenders.length,
-      attackers: square.attackers.length,
+    squareElements.forEach((squareElement) => {
+      const children = squareElement?.querySelectorAll('.attackers-defenders');
+      children?.forEach((child) => {
+        squareElement?.removeChild(child);
+      });
+  
+      if (squareElement) {
+        const childDiv = document.createElement('div');
+        childDiv.classList.add('attackers-defenders');
+        const childText = document.createElement('p');
+        childText.innerText = `d: ${square.defenders.length}, a: ${square.attackers.length}`;
+        childDiv.appendChild(childText);
+  
+        squareElement.appendChild(childDiv);
+      }
     })
   }
-  console.log({chessboard});
+
+  if (pieceMoved) {
+    const joinedSelector = pieceMoved.split(' ').join('.');
+    const pieceMovedElement = document.querySelector(`.${joinedSelector}`);
+
+    if (pieceMovedElement) {
+      const children = pieceMovedElement?.querySelectorAll('.attackers-defenders');
+      children?.forEach((child) => {
+        pieceMovedElement?.removeChild(child);
+      });
+    }
+  }
 }
 
-setTimeout(() => {
-  calculate();
-}, 1000)
+calculate();
 
-function testing() {
+function testing(pieceMoved: string) {
   const childNodes = board && board.childNodes;
 
   if (!childNodes) {
@@ -73,9 +93,10 @@ function testing() {
   const _classString = pieceNodes.map(node => `${node.classList[1]}_${node.classList[2]}`).join('_');
 
   const diff = findStringDifference(classString, _classString);
+
   if (!!diff.trim()) {
     classString = _classString;
-    calculate();
+    calculate(pieceMoved);
   }
 }
 
@@ -85,7 +106,7 @@ const observer = new MutationObserver(mutationsList => {
           if (mutation.attributeName === 'class') {
               const targetNode = mutation.target as HTMLElement;
               if (targetNode.classList.contains('piece') && !targetNode.classList.contains('dragging')) {
-                testing()
+                testing(targetNode.classList.value)
               }
           }
       }
