@@ -212,34 +212,6 @@ const generateChessboard = pieceNodes => {
         } else {
           // handle this later
         }
-
-        // if (square.color === 'w') {
-        //   const defenders = res.filter(attacker => attacker.color === 'w');
-        //   const attackers = res.filter(attacker => attacker.color === 'b');
-        //   chessboard[r][f].attackers = attackers;
-        //   chessboard[r][f].defenders = defenders;
-        // }
-
-        // if (square.color === 'b') {
-        //   const defenders = res.filter(attacker => attacker.color === 'b');
-        //   const attackers = res.filter(attacker => attacker.color === 'w');
-        //   chessboard[r][f].attackers = attackers;
-        //   chessboard[r][f].defenders = defenders;
-        // }
-
-        // if (square.color === null) {
-        //   if (playingAs === 'w') {
-        //     const defenders = res.filter(attacker => attacker.color === 'w');
-        //     const attackers = res.filter(attacker => attacker.color === 'b');
-        //     chessboard[r][f].attackers = attackers;
-        //     chessboard[r][f].defenders = defenders;
-        //   } else {
-        //     const defenders = res.filter(attacker => attacker.color === 'b');
-        //     const attackers = res.filter(attacker => attacker.color === 'w');
-        //     chessboard[r][f].attackers = attackers;
-        //     chessboard[r][f].defenders = defenders;
-        //   }
-        // }
       }
     }
   }
@@ -3931,7 +3903,7 @@ if (true) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("76e11505777e2a8d8f9c")
+/******/ 		__webpack_require__.h = () => ("b41dfa03ab673c095dca")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */

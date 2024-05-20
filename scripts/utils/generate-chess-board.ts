@@ -2,7 +2,7 @@ import { Chessboard } from "../types";
 import { allSquares, playingAs, fileNumberToLetterMap } from "../constants";
 import { generateAttackers } from "./generate-attackers";
 
-export const generateChessboard = (pieceNodes: ChildNode[]): Chessboard => {
+export const generateChessboard = (pieceNodes: Element[]): Chessboard => {
   const pieces = Array.from(pieceNodes);
 
   const occupiedSquares = pieces.map(piece => {
@@ -84,34 +84,6 @@ export const generateChessboard = (pieceNodes: ChildNode[]): Chessboard => {
         } else {
           // handle this later
         }
-
-        // if (square.color === 'w') {
-        //   const defenders = res.filter(attacker => attacker.color === 'w');
-        //   const attackers = res.filter(attacker => attacker.color === 'b');
-        //   chessboard[r][f].attackers = attackers;
-        //   chessboard[r][f].defenders = defenders;
-        // }
-  
-        // if (square.color === 'b') {
-        //   const defenders = res.filter(attacker => attacker.color === 'b');
-        //   const attackers = res.filter(attacker => attacker.color === 'w');
-        //   chessboard[r][f].attackers = attackers;
-        //   chessboard[r][f].defenders = defenders;
-        // }
-  
-        // if (square.color === null) {
-        //   if (playingAs === 'w') {
-        //     const defenders = res.filter(attacker => attacker.color === 'w');
-        //     const attackers = res.filter(attacker => attacker.color === 'b');
-        //     chessboard[r][f].attackers = attackers;
-        //     chessboard[r][f].defenders = defenders;
-        //   } else {
-        //     const defenders = res.filter(attacker => attacker.color === 'b');
-        //     const attackers = res.filter(attacker => attacker.color === 'w');
-        //     chessboard[r][f].attackers = attackers;
-        //     chessboard[r][f].defenders = defenders;
-        //   }
-        // }
       }
     }
   }
