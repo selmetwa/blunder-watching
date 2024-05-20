@@ -61,33 +61,57 @@ export const generateChessboard = (pieceNodes: ChildNode[]): Chessboard => {
       const { attackers: res } = generateAttackers(chessboard, square);
 
       if (chessboard?.[r]?.[f] !== undefined) {
-        if (square.color === 'w') {
-          const defenders = res.filter(attacker => attacker.color === 'w');
-          const attackers = res.filter(attacker => attacker.color === 'b');
-          chessboard[r][f].attackers = attackers;
-          chessboard[r][f].defenders = defenders;
-        }
-  
-        if (square.color === 'b') {
-          const defenders = res.filter(attacker => attacker.color === 'b');
-          const attackers = res.filter(attacker => attacker.color === 'w');
-          chessboard[r][f].attackers = attackers;
-          chessboard[r][f].defenders = defenders;
-        }
-  
-        if (square.color === null) {
-          if (playingAs === 'w') {
+        if (playingAs === 'w') {
+          if (square.color === 'w') {
             const defenders = res.filter(attacker => attacker.color === 'w');
             const attackers = res.filter(attacker => attacker.color === 'b');
             chessboard[r][f].attackers = attackers;
             chessboard[r][f].defenders = defenders;
-          } else {
-            const defenders = res.filter(attacker => attacker.color === 'b');
-            const attackers = res.filter(attacker => attacker.color === 'w');
+          }
+
+          if (square.color === 'b') {
+            const defenders = res.filter(attacker => attacker.color === 'w');
+            const attackers = res.filter(attacker => attacker.color === 'b');
             chessboard[r][f].attackers = attackers;
             chessboard[r][f].defenders = defenders;
           }
+          if (square.color === null) {
+            const defenders = res.filter(attacker => attacker.color === 'w');
+            const attackers = res.filter(attacker => attacker.color === 'b');
+            chessboard[r][f].attackers = attackers;
+            chessboard[r][f].defenders = defenders;
+          }
+        } else {
+          // handle this later
         }
+
+        // if (square.color === 'w') {
+        //   const defenders = res.filter(attacker => attacker.color === 'w');
+        //   const attackers = res.filter(attacker => attacker.color === 'b');
+        //   chessboard[r][f].attackers = attackers;
+        //   chessboard[r][f].defenders = defenders;
+        // }
+  
+        // if (square.color === 'b') {
+        //   const defenders = res.filter(attacker => attacker.color === 'b');
+        //   const attackers = res.filter(attacker => attacker.color === 'w');
+        //   chessboard[r][f].attackers = attackers;
+        //   chessboard[r][f].defenders = defenders;
+        // }
+  
+        // if (square.color === null) {
+        //   if (playingAs === 'w') {
+        //     const defenders = res.filter(attacker => attacker.color === 'w');
+        //     const attackers = res.filter(attacker => attacker.color === 'b');
+        //     chessboard[r][f].attackers = attackers;
+        //     chessboard[r][f].defenders = defenders;
+        //   } else {
+        //     const defenders = res.filter(attacker => attacker.color === 'b');
+        //     const attackers = res.filter(attacker => attacker.color === 'w');
+        //     chessboard[r][f].attackers = attackers;
+        //     chessboard[r][f].defenders = defenders;
+        //   }
+        // }
       }
     }
   }

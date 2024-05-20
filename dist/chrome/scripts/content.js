@@ -59,6 +59,19 @@ console.log("content script loaded!");
 
 const board = document.querySelector('wc-chess-board');
 let classString = '';
+function calculateColor(attackers, defenders) {
+  const reds = ['rgba(197, 150, 151, 1)', 'rgba(190, 137, 137, 1)', 'rgba(183, 123, 123, 1)', 'rgba(175, 110, 110, 1)', 'rgba(168, 97, 97, 1)', 'rgba(158, 87, 87, 1)', 'rgba(151, 74, 74, 1)', 'rgba(144, 61, 61, 1)'];
+  const greens = ['rgba(151, 196, 175, 1)', 'rgba(129, 177, 158, 1)', 'rgba(108, 158, 141, 1)', 'rgba(86, 139, 124, 1)', 'rgba(65, 120, 107, 1)', 'rgba(43, 101, 90, 1)', 'rgba(22, 82, 73, 1)', 'rgba(0, 63, 56, 1)'];
+  if (attackers === defenders) {
+    return 'rgba(201, 240, 255, 1)'; // make this blue
+  }
+  if (attackers > defenders) {
+    return reds[attackers - defenders - 1];
+  }
+  if (defenders > attackers) {
+    return greens[defenders - attackers - 1];
+  }
+}
 function findStringDifference(str1, str2) {
   let diff = '';
   for (let i = 0; i < Math.min(str1.length, str2.length); i++) {
@@ -80,25 +93,78 @@ function calculate(pieceMoved = '') {
     }
     return false;
   });
+  const emptyNodes = Array.from(childNodes).filter(node => {
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      const elementNode = node;
+      return elementNode.classList.contains('empty');
+    }
+    return false;
+  });
+  emptyNodes.forEach(childNode => {
+    board.removeChild(childNode);
+  });
   const _classString = pieceNodes.map(node => `${node.classList[1]}_${node.classList[2]}`).join('_');
   classString = _classString;
   const chessboard = (0,_utils_generate_chess_board__WEBPACK_IMPORTED_MODULE_0__.generateChessboard)(pieceNodes);
   const flatChessboard = chessboard.flat();
+  console.log({
+    flatChessboard,
+    childNodes,
+    emptyNodes
+  });
   for (const square of flatChessboard) {
     const [file, rank] = square && square.square && square?.square?.split('') || [];
     const selector = `.square-${_constants__WEBPACK_IMPORTED_MODULE_1__.fileLetterToNumberMap[file]}${rank}`;
     const squareElements = document.querySelectorAll(selector);
+    if (square.type === 'e') {
+      const color = calculateColor(square.attackers.length, square.defenders.length);
+      const emptySquare = document.createElement('div');
+      emptySquare.style.backgroundSize = '100%';
+      emptySquare.style.cursor = 'pointer'; // Setting multiple cursor styles for cross-browser compatibility
+      emptySquare.style.cursor = 'grab';
+      emptySquare.style.cursor = '-webkit-grab';
+      emptySquare.style.height = '12.5%';
+      emptySquare.style.left = '0';
+      emptySquare.style.overflow = 'hidden';
+      emptySquare.style.position = 'absolute';
+      emptySquare.style.top = '0';
+      emptySquare.style.touchAction = 'none';
+      emptySquare.style.width = '12.5%';
+      emptySquare.style.willChange = 'transform';
+      emptySquare.style.outline = '1px solid black';
+      emptySquare.style.backgroundColor = color;
+      emptySquare.classList.add('empty');
+      emptySquare.classList.add(`square-${_constants__WEBPACK_IMPORTED_MODULE_1__.fileLetterToNumberMap[file]}${rank}`);
+      const childDiv = document.createElement('div');
+      childDiv.classList.add('attackers-defenders');
+      const childText = document.createElement('p');
+      childText.style.fontSize = '12px';
+      childDiv.style.padding = '2px';
+      childText.innerText = `${square.defenders.length - square.attackers.length}`;
+      childDiv.appendChild(childText);
+      emptySquare.appendChild(childDiv);
+      board.appendChild(emptySquare);
+    }
     squareElements.forEach(squareElement => {
       const children = squareElement?.querySelectorAll('.attackers-defenders');
       children?.forEach(child => {
         squareElement?.removeChild(child);
       });
       if (squareElement) {
+        const color = calculateColor(square.attackers.length, square.defenders.length);
+        if (color) {
+          squareElement.style.backgroundColor = color;
+        } else {
+          squareElement.style.backgroundColor = '';
+        }
         const childDiv = document.createElement('div');
         childDiv.classList.add('attackers-defenders');
         const childText = document.createElement('p');
-        childText.innerText = `d: ${square.defenders.length}, a: ${square.attackers.length}`;
+        childText.style.fontSize = '12px';
+        childDiv.style.padding = '2px';
+        childText.innerText = `${square.defenders.length - square.attackers.length}`;
         childDiv.appendChild(childText);
+        squareElement.style.outline = '1px solid black';
         squareElement.appendChild(childDiv);
       }
     });
@@ -307,31 +373,56 @@ const generateChessboard = pieceNodes => {
         attackers: res
       } = (0,_generate_attackers__WEBPACK_IMPORTED_MODULE_1__.generateAttackers)(chessboard, square);
       if (chessboard?.[r]?.[f] !== undefined) {
-        if (square.color === 'w') {
-          const defenders = res.filter(attacker => attacker.color === 'w');
-          const attackers = res.filter(attacker => attacker.color === 'b');
-          chessboard[r][f].attackers = attackers;
-          chessboard[r][f].defenders = defenders;
-        }
-        if (square.color === 'b') {
-          const defenders = res.filter(attacker => attacker.color === 'b');
-          const attackers = res.filter(attacker => attacker.color === 'w');
-          chessboard[r][f].attackers = attackers;
-          chessboard[r][f].defenders = defenders;
-        }
-        if (square.color === null) {
-          if (_constants__WEBPACK_IMPORTED_MODULE_0__.playingAs === 'w') {
+        if (_constants__WEBPACK_IMPORTED_MODULE_0__.playingAs === 'w') {
+          if (square.color === 'w') {
             const defenders = res.filter(attacker => attacker.color === 'w');
             const attackers = res.filter(attacker => attacker.color === 'b');
             chessboard[r][f].attackers = attackers;
             chessboard[r][f].defenders = defenders;
-          } else {
-            const defenders = res.filter(attacker => attacker.color === 'b');
-            const attackers = res.filter(attacker => attacker.color === 'w');
+          }
+          if (square.color === 'b') {
+            const defenders = res.filter(attacker => attacker.color === 'w');
+            const attackers = res.filter(attacker => attacker.color === 'b');
             chessboard[r][f].attackers = attackers;
             chessboard[r][f].defenders = defenders;
           }
+          if (square.color === null) {
+            const defenders = res.filter(attacker => attacker.color === 'w');
+            const attackers = res.filter(attacker => attacker.color === 'b');
+            chessboard[r][f].attackers = attackers;
+            chessboard[r][f].defenders = defenders;
+          }
+        } else {
+          // handle this later
         }
+
+        // if (square.color === 'w') {
+        //   const defenders = res.filter(attacker => attacker.color === 'w');
+        //   const attackers = res.filter(attacker => attacker.color === 'b');
+        //   chessboard[r][f].attackers = attackers;
+        //   chessboard[r][f].defenders = defenders;
+        // }
+
+        // if (square.color === 'b') {
+        //   const defenders = res.filter(attacker => attacker.color === 'b');
+        //   const attackers = res.filter(attacker => attacker.color === 'w');
+        //   chessboard[r][f].attackers = attackers;
+        //   chessboard[r][f].defenders = defenders;
+        // }
+
+        // if (square.color === null) {
+        //   if (playingAs === 'w') {
+        //     const defenders = res.filter(attacker => attacker.color === 'w');
+        //     const attackers = res.filter(attacker => attacker.color === 'b');
+        //     chessboard[r][f].attackers = attackers;
+        //     chessboard[r][f].defenders = defenders;
+        //   } else {
+        //     const defenders = res.filter(attacker => attacker.color === 'b');
+        //     const attackers = res.filter(attacker => attacker.color === 'w');
+        //     chessboard[r][f].attackers = attackers;
+        //     chessboard[r][f].defenders = defenders;
+        //   }
+        // }
       }
     }
   }
@@ -4023,7 +4114,7 @@ if (true) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("85d99fe579aff5f8faa7")
+/******/ 		__webpack_require__.h = () => ("76e11505777e2a8d8f9c")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */

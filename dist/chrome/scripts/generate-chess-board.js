@@ -190,31 +190,56 @@ const generateChessboard = pieceNodes => {
         attackers: res
       } = (0,_generate_attackers__WEBPACK_IMPORTED_MODULE_1__.generateAttackers)(chessboard, square);
       if (chessboard?.[r]?.[f] !== undefined) {
-        if (square.color === 'w') {
-          const defenders = res.filter(attacker => attacker.color === 'w');
-          const attackers = res.filter(attacker => attacker.color === 'b');
-          chessboard[r][f].attackers = attackers;
-          chessboard[r][f].defenders = defenders;
-        }
-        if (square.color === 'b') {
-          const defenders = res.filter(attacker => attacker.color === 'b');
-          const attackers = res.filter(attacker => attacker.color === 'w');
-          chessboard[r][f].attackers = attackers;
-          chessboard[r][f].defenders = defenders;
-        }
-        if (square.color === null) {
-          if (_constants__WEBPACK_IMPORTED_MODULE_0__.playingAs === 'w') {
+        if (_constants__WEBPACK_IMPORTED_MODULE_0__.playingAs === 'w') {
+          if (square.color === 'w') {
             const defenders = res.filter(attacker => attacker.color === 'w');
             const attackers = res.filter(attacker => attacker.color === 'b');
             chessboard[r][f].attackers = attackers;
             chessboard[r][f].defenders = defenders;
-          } else {
-            const defenders = res.filter(attacker => attacker.color === 'b');
-            const attackers = res.filter(attacker => attacker.color === 'w');
+          }
+          if (square.color === 'b') {
+            const defenders = res.filter(attacker => attacker.color === 'w');
+            const attackers = res.filter(attacker => attacker.color === 'b');
             chessboard[r][f].attackers = attackers;
             chessboard[r][f].defenders = defenders;
           }
+          if (square.color === null) {
+            const defenders = res.filter(attacker => attacker.color === 'w');
+            const attackers = res.filter(attacker => attacker.color === 'b');
+            chessboard[r][f].attackers = attackers;
+            chessboard[r][f].defenders = defenders;
+          }
+        } else {
+          // handle this later
         }
+
+        // if (square.color === 'w') {
+        //   const defenders = res.filter(attacker => attacker.color === 'w');
+        //   const attackers = res.filter(attacker => attacker.color === 'b');
+        //   chessboard[r][f].attackers = attackers;
+        //   chessboard[r][f].defenders = defenders;
+        // }
+
+        // if (square.color === 'b') {
+        //   const defenders = res.filter(attacker => attacker.color === 'b');
+        //   const attackers = res.filter(attacker => attacker.color === 'w');
+        //   chessboard[r][f].attackers = attackers;
+        //   chessboard[r][f].defenders = defenders;
+        // }
+
+        // if (square.color === null) {
+        //   if (playingAs === 'w') {
+        //     const defenders = res.filter(attacker => attacker.color === 'w');
+        //     const attackers = res.filter(attacker => attacker.color === 'b');
+        //     chessboard[r][f].attackers = attackers;
+        //     chessboard[r][f].defenders = defenders;
+        //   } else {
+        //     const defenders = res.filter(attacker => attacker.color === 'b');
+        //     const attackers = res.filter(attacker => attacker.color === 'w');
+        //     chessboard[r][f].attackers = attackers;
+        //     chessboard[r][f].defenders = defenders;
+        //   }
+        // }
       }
     }
   }
@@ -3906,7 +3931,7 @@ if (true) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("85d99fe579aff5f8faa7")
+/******/ 		__webpack_require__.h = () => ("76e11505777e2a8d8f9c")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
