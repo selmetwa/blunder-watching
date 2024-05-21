@@ -4,8 +4,8 @@ export type Square = {
     color: string | null,
     type: SquareType,
     square: string,
-    attackers: Array<any>,
-    defenders: Array<any>,
+    attackers: Array<Square>,
+    defenders: Array<Square>,
     class: string
 };
 

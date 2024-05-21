@@ -9,7 +9,11 @@ export const allSquares = [
   'a8', 'b8', 'c8', 'd8', 'e8', 'f8', 'g8', 'h8',
 ]
 
-export const fileNumberToLetterMap = {
+interface FileNumberToLetterMap {
+  [key: number]: string;
+}
+
+export const fileNumberToLetterMap: FileNumberToLetterMap = {
   1: 'a',
   2: 'b',
   3: 'c',
@@ -20,7 +24,11 @@ export const fileNumberToLetterMap = {
   8: 'h',
 }
 
-export const fileLetterToNumberMap = {
+interface LetterToNumberMap {
+  [key: string]: number;
+}
+
+export const fileLetterToNumberMap: LetterToNumberMap = {
   'a': 1,
   'b': 2,
   'c': 3,

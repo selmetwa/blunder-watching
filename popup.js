@@ -8,10 +8,10 @@ document.getElementById('sendMessageButton').addEventListener('click', (event) =
     // Send the selected value to the content script
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.tabs.sendMessage(tabs[0].id, { action: 'selectedOption', value: selectedValue }, (response) => {
-        console.log(response.status);
+        if (response) {
+          console.log(response.status);
+        }
       });
     });
-  } else {
-    console.log('No option selected');
   }
 });

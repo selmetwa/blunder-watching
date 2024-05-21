@@ -3,9 +3,7 @@ import { allSquares, fileNumberToLetterMap } from "../constants";
 import { generateAttackers } from "./generate-attackers";
 
 export const generateChessboard = (pieceNodes: Element[], playingAs: 'white' | 'black'): Chessboard => {
-  console.log({ playingAs})
   const pieces = Array.from(pieceNodes);
-  console.log({ pieces })
   const occupiedSquares = pieces.map(piece => {
     const classList = piece.classList;
     const pieceTypeInfo = classList[1];

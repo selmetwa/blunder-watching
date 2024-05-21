@@ -54,16 +54,14 @@ if (true) {
   module.hot.accept();
 }
 ;
-console.log("content script loaded!");
 
 
 
 
-let selectedOption = '';
+let selectedOption = 'white';
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'selectedOption') {
     const selectedValue = request.value;
-    console.log('Received selected option:', selectedValue);
     sendResponse({
       status: 'Option received'
     });
@@ -95,15 +93,15 @@ function calculate(pieceMoved = '') {
   emptyNodes.forEach(childNode => {
     board.removeChild(childNode);
   });
-  const _classString = pieceNodes.map(node => `${node.classList[1]}_${node.classList[2]}`).join('_');
+
+  // const _classString = pieceNodes.map(node => `${node.classList[1]}_${node.classList[2]}`).join('_');
+  const _classString = pieceNodes.map(node => {
+    const element = node;
+    return `${element.classList[1]}_${element.classList[2]}`;
+  }).join('_');
   classString = _classString;
   const chessboard = (0,_utils_generate_chess_board__WEBPACK_IMPORTED_MODULE_0__.generateChessboard)(pieceNodes, selectedOption);
   const flatChessboard = chessboard.flat();
-  console.log({
-    flatChessboard,
-    childNodes,
-    emptyNodes
-  });
   for (const square of flatChessboard) {
     const [file, rank] = square && square.square && square?.square?.split('') || [];
     const selector = `.square-${_constants__WEBPACK_IMPORTED_MODULE_1__.fileLetterToNumberMap[file]}${rank}`;
@@ -124,7 +122,7 @@ function calculate(pieceMoved = '') {
       emptySquare.style.width = '12.5%';
       emptySquare.style.willChange = 'transform';
       emptySquare.style.outline = '1px solid black';
-      emptySquare.style.backgroundColor = color;
+      emptySquare.style.backgroundColor = color || '';
       emptySquare.classList.add('empty');
       emptySquare.classList.add(`square-${_constants__WEBPACK_IMPORTED_MODULE_1__.fileLetterToNumberMap[file]}${rank}`);
       const childDiv = document.createElement('div');
@@ -143,12 +141,11 @@ function calculate(pieceMoved = '') {
         squareElement?.removeChild(child);
       });
       if (squareElement) {
+        const element = squareElement;
         const color = (0,_utils_calculate_color__WEBPACK_IMPORTED_MODULE_2__.calculateColor)(square.attackers.length, square.defenders.length);
-        if (color) {
-          squareElement.style.backgroundColor = color;
-        } else {
-          squareElement.style.backgroundColor = '';
-        }
+        element.style.backgroundColor = color || '';
+        element.style.opacity = '1';
+        // element.style.zIndex = '10';
         const childDiv = document.createElement('div');
         childDiv.classList.add('attackers-defenders');
         const childText = document.createElement('p');
@@ -156,8 +153,8 @@ function calculate(pieceMoved = '') {
         childDiv.style.padding = '2px';
         childText.innerText = `${square.defenders.length - square.attackers.length}`;
         childDiv.appendChild(childText);
-        squareElement.style.outline = '1px solid black';
-        squareElement.appendChild(childDiv);
+        element.style.outline = '1px solid black';
+        element.appendChild(childDiv);
       }
     });
   }
@@ -169,6 +166,8 @@ function calculate(pieceMoved = '') {
       children?.forEach(child => {
         pieceMovedElement?.removeChild(child);
       });
+      // pieceMovedElement.style.zIndex = '10';
+      pieceMovedElement.style.backgroundColor = 'transparent';
     }
   }
 }
@@ -184,7 +183,10 @@ function repaint(pieceMoved) {
     }
     return false;
   });
-  const _classString = pieceNodes.map(node => `${node.classList[1]}_${node.classList[2]}`).join('_');
+  const _classString = pieceNodes.map(node => {
+    const element = node;
+    return `${element.classList[1]}_${element.classList[2]}`;
+  }).join('_');
   const diff = (0,_utils_find_string_difference__WEBPACK_IMPORTED_MODULE_3__.findStringDifference)(classString, _classString);
   if (!!diff.trim()) {
     classString = _classString;
@@ -355,13 +357,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const generateChessboard = (pieceNodes, playingAs) => {
-  console.log({
-    playingAs
-  });
   const pieces = Array.from(pieceNodes);
-  console.log({
-    pieces
-  });
   const occupiedSquares = pieces.map(piece => {
     const classList = piece.classList;
     const pieceTypeInfo = classList[1];
@@ -4151,7 +4147,7 @@ if (true) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("2f0022ce05afb42e03b5")
+/******/ 		__webpack_require__.h = () => ("9b5cffe69c69b340aacc")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */

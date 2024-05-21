@@ -1,15 +1,13 @@
-console.log("content script loaded!")
 import { generateChessboard } from './utils/generate-chess-board';
 import { fileLetterToNumberMap } from './constants';
 import { calculateColor } from './utils/calculate-color';
 import { findStringDifference } from './utils/find-string-difference';
 
-let selectedOption = '';
+let selectedOption: 'white' | 'black' = 'white';
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'selectedOption') {
     const selectedValue = request.value;
-    console.log('Received selected option:', selectedValue);
     sendResponse({ status: 'Option received' });
     selectedOption = selectedValue;
     calculate();
@@ -47,12 +45,15 @@ function calculate(pieceMoved = '') {
     board.removeChild(childNode);
   });
 
-  const _classString = pieceNodes.map(node => `${node.classList[1]}_${node.classList[2]}`).join('_');
+  // const _classString = pieceNodes.map(node => `${node.classList[1]}_${node.classList[2]}`).join('_');
+  const _classString = pieceNodes.map(node => {
+    const element = node as HTMLElement;
+    return `${element.classList[1]}_${element.classList[2]}`;
+  }).join('_');
   classString = _classString;
 
   const chessboard = generateChessboard(pieceNodes as Element[], selectedOption);
   const flatChessboard = chessboard.flat();
-  console.log({ flatChessboard, childNodes, emptyNodes })
 
   for (const square of flatChessboard) {
     const [file, rank] = square && square.square && square?.square?.split('') || [];
@@ -61,7 +62,7 @@ function calculate(pieceMoved = '') {
 
     if (square.type === 'e') {
       const color = calculateColor(square.attackers.length, square.defenders.length);
-      const emptySquare = document.createElement('div');
+      const emptySquare = document.createElement('div') as HTMLElement;
       emptySquare.style.backgroundSize = '100%';
       emptySquare.style.cursor = 'pointer'; // Setting multiple cursor styles for cross-browser compatibility
       emptySquare.style.cursor = 'grab';
@@ -76,7 +77,7 @@ function calculate(pieceMoved = '') {
       emptySquare.style.willChange = 'transform';
       emptySquare.style.outline = '1px solid black';
 
-      emptySquare.style.backgroundColor = color;
+      emptySquare.style.backgroundColor = color || '';
       emptySquare.classList.add('empty');
       emptySquare.classList.add(`square-${fileLetterToNumberMap[file]}${rank}`);
       const childDiv = document.createElement('div');
@@ -95,14 +96,13 @@ function calculate(pieceMoved = '') {
       children?.forEach((child) => {
         squareElement?.removeChild(child);
       });
-  
+
       if (squareElement) {
+        const element = squareElement as HTMLElement;
         const color = calculateColor(square.attackers.length, square.defenders.length);
-        if (color) {
-          squareElement.style.backgroundColor = color;
-        } else {
-          squareElement.style.backgroundColor = '';
-        }
+        element.style.backgroundColor = color || '';
+        element.style.opacity = '1';
+        // element.style.zIndex = '10';
         const childDiv = document.createElement('div');
         childDiv.classList.add('attackers-defenders');
         const childText = document.createElement('p');
@@ -110,21 +110,23 @@ function calculate(pieceMoved = '') {
         childDiv.style.padding = '2px';
         childText.innerText = `${square.defenders.length - square.attackers.length}`;
         childDiv.appendChild(childText);
-        squareElement.style.outline = '1px solid black';
-        squareElement.appendChild(childDiv);
+        element.style.outline = '1px solid black';
+        element.appendChild(childDiv);
       }
     })
   }
 
   if (pieceMoved) {
     const joinedSelector = pieceMoved.split(' ').join('.');
-    const pieceMovedElement = document.querySelector(`.${joinedSelector}`);
-
+    const pieceMovedElement = document.querySelector(`.${joinedSelector}`) as HTMLElement;
+  
     if (pieceMovedElement) {
       const children = pieceMovedElement?.querySelectorAll('.attackers-defenders');
       children?.forEach((child) => {
         pieceMovedElement?.removeChild(child);
       });
+      // pieceMovedElement.style.zIndex = '10';
+      pieceMovedElement.style.backgroundColor = 'transparent';
     }
   }
 }
@@ -144,7 +146,10 @@ function repaint(pieceMoved: string) {
     return false;
   });
 
-  const _classString = pieceNodes.map(node => `${node.classList[1]}_${node.classList[2]}`).join('_');
+  const _classString = pieceNodes.map(node => {
+    const element = node as HTMLElement;
+    return `${element.classList[1]}_${element.classList[2]}`;
+  }).join('_');
 
   const diff = findStringDifference(classString, _classString);
 
