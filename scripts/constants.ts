@@ -30,5 +30,3 @@ export const fileLetterToNumberMap = {
   'g': 7,
   'h': 8,
 }
-
-export const playingAs: 'w' | 'b' = 'w';

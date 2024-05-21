@@ -4,6 +4,18 @@ import { fileLetterToNumberMap } from './constants';
 import { calculateColor } from './utils/calculate-color';
 import { findStringDifference } from './utils/find-string-difference';
 
+let selectedOption = '';
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === 'selectedOption') {
+    const selectedValue = request.value;
+    console.log('Received selected option:', selectedValue);
+    sendResponse({ status: 'Option received' });
+    selectedOption = selectedValue;
+    calculate();
+  }
+});
+
 const board = document.querySelector('wc-chess-board') as HTMLElement
 
 let classString = '';
@@ -38,7 +50,7 @@ function calculate(pieceMoved = '') {
   const _classString = pieceNodes.map(node => `${node.classList[1]}_${node.classList[2]}`).join('_');
   classString = _classString;
 
-  const chessboard = generateChessboard(pieceNodes);
+  const chessboard = generateChessboard(pieceNodes as Element[], selectedOption);
   const flatChessboard = chessboard.flat();
   console.log({ flatChessboard, childNodes, emptyNodes })
 
@@ -116,10 +128,6 @@ function calculate(pieceMoved = '') {
     }
   }
 }
-
-setTimeout(() => {
-calculate();
-}, 1000);
 
 function repaint(pieceMoved: string) {
   const childNodes = board && board.childNodes;

@@ -1,6 +1,41 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./popup.js":
+/*!******************!*\
+  !*** ./popup.js ***!
+  \******************/
+/***/ ((module) => {
+
+if (true) {
+  module.hot.accept();
+}
+;
+document.getElementById('sendMessageButton').addEventListener('click', event => {
+  event.preventDefault();
+  const selectedOption = document.querySelector('input[name="option"]:checked');
+  if (selectedOption) {
+    const selectedValue = selectedOption.value;
+
+    // Send the selected value to the content script
+    chrome.tabs.query({
+      active: true,
+      currentWindow: true
+    }, tabs => {
+      chrome.tabs.sendMessage(tabs[0].id, {
+        action: 'selectedOption',
+        value: selectedValue
+      }, response => {
+        console.log(response.status);
+      });
+    });
+  } else {
+    console.log('No option selected');
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/ansi-html-community/index.js":
 /*!***************************************************!*\
   !*** ./node_modules/ansi-html-community/index.js ***!
@@ -3385,12 +3420,12 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 	
 /******/ 	/* webpack/runtime/get update manifest filename */
 /******/ 	(() => {
-/******/ 		__webpack_require__.hmrF = () => ("hot/page_action_default_popup." + __webpack_require__.h() + ".hot-update.json");
+/******/ 		__webpack_require__.hmrF = () => ("hot/action_default_popup." + __webpack_require__.h() + ".hot-update.json");
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("b41dfa03ab673c095dca")
+/******/ 		__webpack_require__.h = () => ("2f0022ce05afb42e03b5")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
@@ -3873,7 +3908,7 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 		// object to store loaded and loading chunks
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
-/******/ 		var installedChunks = __webpack_require__.hmrS_css = __webpack_require__.hmrS_css || {"page_action/default_popup":0};
+/******/ 		var installedChunks = __webpack_require__.hmrS_css = __webpack_require__.hmrS_css || {"action/default_popup":0};
 /******/ 		
 /******/ 		var uniqueName = "blunder-watching";
 /******/ 		var loadCssChunkData = (target, link, chunkId) => {
@@ -4008,7 +4043,7 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = __webpack_require__.hmrS_jsonp = __webpack_require__.hmrS_jsonp || {
-/******/ 			"page_action/default_popup": 0
+/******/ 			"action/default_popup": 0
 /******/ 		};
 /******/ 		
 /******/ 		// no chunk on demand loading
@@ -4522,6 +4557,7 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 	// Load entry module and return exports
 /******/ 	__webpack_require__("./node_modules/webpack-dev-server/client/index.js?protocol=ws%3A&hostname=127.0.0.1&port=8080&pathname=%2Fws&logging=none&progress=false&overlay=%7B%22errors%22%3Afalse%2C%22warnings%22%3Afalse%7D&reconnect=10&hot=only&live-reload=true");
 /******/ 	__webpack_require__("./node_modules/webpack/hot/only-dev-server.js");
+/******/ 	__webpack_require__("./popup.js");
 /******/ 	var __webpack_exports__ = __webpack_require__("./node_modules/webpack-browser-extension-html/dist/minimum-script-file.mjs");
 /******/ 	
 /******/ })()

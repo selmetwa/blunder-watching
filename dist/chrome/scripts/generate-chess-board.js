@@ -12,8 +12,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   allSquares: () => (/* binding */ allSquares),
 /* harmony export */   fileLetterToNumberMap: () => (/* binding */ fileLetterToNumberMap),
-/* harmony export */   fileNumberToLetterMap: () => (/* binding */ fileNumberToLetterMap),
-/* harmony export */   playingAs: () => (/* binding */ playingAs)
+/* harmony export */   fileNumberToLetterMap: () => (/* binding */ fileNumberToLetterMap)
 /* harmony export */ });
 const allSquares = ['a1', 'b1', 'c1', 'd1', 'e1', 'f1', 'g1', 'h1', 'a2', 'b2', 'c2', 'd2', 'e2', 'f2', 'g2', 'h2', 'a3', 'b3', 'c3', 'd3', 'e3', 'f3', 'g3', 'h3', 'a4', 'b4', 'c4', 'd4', 'e4', 'f4', 'g4', 'h4', 'a5', 'b5', 'c5', 'd5', 'e5', 'f5', 'g5', 'h5', 'a6', 'b6', 'c6', 'd6', 'e6', 'f6', 'g6', 'h6', 'a7', 'b7', 'c7', 'd7', 'e7', 'f7', 'g7', 'h7', 'a8', 'b8', 'c8', 'd8', 'e8', 'f8', 'g8', 'h8'];
 const fileNumberToLetterMap = {
@@ -36,7 +35,6 @@ const fileLetterToNumberMap = {
   'g': 7,
   'h': 8
 };
-const playingAs = 'w';
 
 /***/ }),
 
@@ -130,8 +128,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _generate_attackers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./generate-attackers */ "./scripts/utils/generate-attackers.ts");
 
 
-const generateChessboard = pieceNodes => {
+const generateChessboard = (pieceNodes, playingAs) => {
+  console.log({
+    playingAs
+  });
   const pieces = Array.from(pieceNodes);
+  console.log({
+    pieces
+  });
   const occupiedSquares = pieces.map(piece => {
     const classList = piece.classList;
     const pieceTypeInfo = classList[1];
@@ -190,7 +194,7 @@ const generateChessboard = pieceNodes => {
         attackers: res
       } = (0,_generate_attackers__WEBPACK_IMPORTED_MODULE_1__.generateAttackers)(chessboard, square);
       if (chessboard?.[r]?.[f] !== undefined) {
-        if (_constants__WEBPACK_IMPORTED_MODULE_0__.playingAs === 'w') {
+        if (playingAs === 'white') {
           if (square.color === 'w') {
             const defenders = res.filter(attacker => attacker.color === 'w');
             const attackers = res.filter(attacker => attacker.color === 'b');
@@ -211,6 +215,24 @@ const generateChessboard = pieceNodes => {
           }
         } else {
           // handle this later
+          if (square.color === 'w') {
+            const defenders = res.filter(attacker => attacker.color === 'b');
+            const attackers = res.filter(attacker => attacker.color === 'w');
+            chessboard[r][f].attackers = attackers;
+            chessboard[r][f].defenders = defenders;
+          }
+          if (square.color === 'b') {
+            const defenders = res.filter(attacker => attacker.color === 'b');
+            const attackers = res.filter(attacker => attacker.color === 'w');
+            chessboard[r][f].attackers = attackers;
+            chessboard[r][f].defenders = defenders;
+          }
+          if (square.color === null) {
+            const defenders = res.filter(attacker => attacker.color === 'b');
+            const attackers = res.filter(attacker => attacker.color === 'w');
+            chessboard[r][f].attackers = attackers;
+            chessboard[r][f].defenders = defenders;
+          }
         }
       }
     }
@@ -3903,7 +3925,7 @@ if (true) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("b41dfa03ab673c095dca")
+/******/ 		__webpack_require__.h = () => ("2f0022ce05afb42e03b5")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */

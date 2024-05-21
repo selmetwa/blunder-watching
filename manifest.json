@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "version": "1.0",
   "name": "blunder-watching",
-  "description": "An extension template using TypeScript. This template includes a new tab override.",
+  "description": "A chrome extension to watch blunders in your games",
   "icons": {
     "16": "images/icons/icon_16.png",
     "48": "images/icons/icon_48.png"
@@ -10,11 +10,11 @@
   "chrome_url_overrides": {
     "newtab": "newtab/index.html"
   },
-  "page_action": {
+  "action": {
     "default_popup": "popup.html"
   },
   "content_scripts": [{
-    "matches": ["<all_urls>"],
+    "matches": ["https://www.chess.com/*"],
     "js": ["scripts/content.ts"]
   }]
 }
