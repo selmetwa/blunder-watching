@@ -8,5 +8,9 @@ export const getSquarePosition = (board: Chessboard, square: Square): { row: num
           }
       }
   }
-  throw new Error('Square not found on the board.');
+
+  return {
+    row: -1,
+    col: -1
+  }
 }

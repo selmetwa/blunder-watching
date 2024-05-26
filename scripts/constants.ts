@@ -9,6 +9,21 @@ export const allSquares = [
   'a8', 'b8', 'c8', 'd8', 'e8', 'f8', 'g8', 'h8',
 ]
 
+export const allPossiblePieces = [
+  'bk', 'bq', 'br', 'bb', 'bn', 'bp',
+  'wk', 'wq', 'wr', 'wb', 'wn', 'wp',
+]
+
+export const pieceValues: { [key: string]: number } = {
+  'e': 0,
+  'p': 1,
+  'n': 3,
+  'b': 3,
+  'r': 5,
+  'q': 9,
+  'k': 10,
+}
+
 interface FileNumberToLetterMap {
   [key: number]: string;
 }

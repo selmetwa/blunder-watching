@@ -10,11 +10,23 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   allPossiblePieces: () => (/* binding */ allPossiblePieces),
 /* harmony export */   allSquares: () => (/* binding */ allSquares),
 /* harmony export */   fileLetterToNumberMap: () => (/* binding */ fileLetterToNumberMap),
-/* harmony export */   fileNumberToLetterMap: () => (/* binding */ fileNumberToLetterMap)
+/* harmony export */   fileNumberToLetterMap: () => (/* binding */ fileNumberToLetterMap),
+/* harmony export */   pieceValues: () => (/* binding */ pieceValues)
 /* harmony export */ });
 const allSquares = ['a1', 'b1', 'c1', 'd1', 'e1', 'f1', 'g1', 'h1', 'a2', 'b2', 'c2', 'd2', 'e2', 'f2', 'g2', 'h2', 'a3', 'b3', 'c3', 'd3', 'e3', 'f3', 'g3', 'h3', 'a4', 'b4', 'c4', 'd4', 'e4', 'f4', 'g4', 'h4', 'a5', 'b5', 'c5', 'd5', 'e5', 'f5', 'g5', 'h5', 'a6', 'b6', 'c6', 'd6', 'e6', 'f6', 'g6', 'h6', 'a7', 'b7', 'c7', 'd7', 'e7', 'f7', 'g7', 'h7', 'a8', 'b8', 'c8', 'd8', 'e8', 'f8', 'g8', 'h8'];
+const allPossiblePieces = ['bk', 'bq', 'br', 'bb', 'bn', 'bp', 'wk', 'wq', 'wr', 'wb', 'wn', 'wp'];
+const pieceValues = {
+  'e': 0,
+  'p': 1,
+  'n': 3,
+  'b': 3,
+  'r': 5,
+  'q': 9,
+  'k': 10
+};
 const fileNumberToLetterMap = {
   1: 'a',
   2: 'b',
@@ -132,8 +144,10 @@ const generateChessboard = (pieceNodes, playingAs) => {
   const pieces = Array.from(pieceNodes);
   const occupiedSquares = pieces.map(piece => {
     const classList = piece.classList;
-    const pieceTypeInfo = classList[1];
-    const pieceSquareInfo = classList[2].split('-')[1];
+    const values = Object.values(classList);
+    const pieceTypeInfo = values.find(value => _constants__WEBPACK_IMPORTED_MODULE_0__.allPossiblePieces.includes(value));
+    const pieceSquareInfoA = values.find(value => value.startsWith('square-'));
+    const pieceSquareInfo = pieceSquareInfoA?.split('-')[1];
     const pieceColor = pieceTypeInfo?.charAt(0);
     const pieceType = pieceTypeInfo?.charAt(1);
     const file = Number(pieceSquareInfo?.charAt(0));
@@ -144,7 +158,8 @@ const generateChessboard = (pieceNodes, playingAs) => {
       type: pieceType,
       square: square,
       attackers: [],
-      defenders: []
+      defenders: [],
+      value: _constants__WEBPACK_IMPORTED_MODULE_0__.pieceValues[pieceType ?? 'e']
     };
   });
   const occupiedSquareCoordinates = occupiedSquares.map(square => square.square);
@@ -153,7 +168,8 @@ const generateChessboard = (pieceNodes, playingAs) => {
     type: 'e',
     square,
     attackers: [],
-    defenders: []
+    defenders: [],
+    value: 0
   }));
   const allSquaresWithPieces = [...occupiedSquares, ...emptySquares];
   const chessboard = Array.from({
@@ -165,7 +181,8 @@ const generateChessboard = (pieceNodes, playingAs) => {
       type,
       square,
       attackers,
-      defenders
+      defenders,
+      value
     } = piece;
     const [file, rank] = square.split(''); // Reverse the square string to match array indexing
     const fileIndex = file.charCodeAt(0) - 97; // Convert file to array index (a=0, b=1, ..., h=7)
@@ -177,7 +194,8 @@ const generateChessboard = (pieceNodes, playingAs) => {
         type,
         square,
         attackers,
-        defenders
+        defenders,
+        value
       };
     }
   });
@@ -310,7 +328,10 @@ const getSquarePosition = (board, square) => {
       }
     }
   }
-  throw new Error('Square not found on the board.');
+  return {
+    row: -1,
+    col: -1
+  };
 };
 
 /***/ }),
@@ -3919,7 +3940,7 @@ if (true) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("9b5cffe69c69b340aacc")
+/******/ 		__webpack_require__.h = () => ("32f2aef19237606853a9")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */

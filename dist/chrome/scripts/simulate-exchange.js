@@ -1,69 +1,95 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./scripts/utils/pieces/helpers/index.ts":
-/*!***********************************************!*\
-  !*** ./scripts/utils/pieces/helpers/index.ts ***!
-  \***********************************************/
+/***/ "./scripts/utils/simulate-exchange.ts":
+/*!********************************************!*\
+  !*** ./scripts/utils/simulate-exchange.ts ***!
+  \********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   getSquarePosition: () => (/* binding */ getSquarePosition)
+/* harmony export */   simulateExchangeForBlack: () => (/* binding */ simulateExchangeForBlack),
+/* harmony export */   simulateExchangeForWhite: () => (/* binding */ simulateExchangeForWhite)
 /* harmony export */ });
-const getSquarePosition = (board, square) => {
-  for (let row = 0; row < board.length; row++) {
-    for (let col = 0; col < board[row].length; col++) {
-      if (board[row][col] === square) {
-        return {
-          row,
-          col
-        };
-      }
+const simulateExchangeForWhite = square => {
+  // Clone and sort the attackers and defenders by value (ascending order)
+  let whiteAttackers = [...square.defenders].sort((a, b) => a.value - b.value) ?? [];
+  let blackDefenders = [...square.attackers].sort((a, b) => a.value - b.value) ?? [];
+
+  // Include the piece on the square in the defenders array
+  blackDefenders.unshift(square);
+  let whiteLostValue = 0;
+  let blackLostValue = 0;
+
+  // Simulate the exchange
+  while (whiteAttackers.length > 0 && blackDefenders.length > 0) {
+    // White captures a black piece
+    blackLostValue += blackDefenders.shift()?.value ?? 0;
+
+    // If there are still defenders left, black captures a white piece
+    if (blackDefenders.length > 0) {
+      whiteLostValue += whiteAttackers.shift()?.value ?? 0;
     }
   }
-  return {
-    row: -1,
-    col: -1
-  };
+
+  // Determine if white wins the exchange
+  if (blackLostValue > whiteLostValue) {
+    return {
+      winner: 'white',
+      diff: blackLostValue - whiteLostValue
+    };
+  } else if (blackLostValue < whiteLostValue) {
+    return {
+      winner: 'black',
+      diff: whiteLostValue - blackLostValue
+    };
+  } else {
+    return {
+      winner: 'null',
+      diff: 0
+    };
+  }
 };
+const simulateExchangeForBlack = square => {
+  // Clone and sort the attackers and defenders by value (ascending order)
+  let blackAttackers = [...square.defenders].sort((a, b) => a.value - b.value) ?? [];
+  let whiteDefenders = [...square.attackers].sort((a, b) => a.value - b.value) ?? [];
 
-/***/ }),
+  // Include the piece on the square in the defenders array
+  whiteDefenders.unshift(square);
+  let blackLostValue = 0;
+  let whiteLostValue = 0;
 
-/***/ "./scripts/utils/pieces/king.ts":
-/*!**************************************!*\
-  !*** ./scripts/utils/pieces/king.ts ***!
-  \**************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+  // Simulate the exchange
+  while (blackAttackers.length > 0 && whiteDefenders.length > 0) {
+    // Black captures a white piece
+    whiteLostValue += whiteDefenders.shift()?.value ?? 0;
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   king: () => (/* binding */ king)
-/* harmony export */ });
-/* harmony import */ var _helpers__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./helpers */ "./scripts/utils/pieces/helpers/index.ts");
-
-const king = (board, king, targetSquare) => {
-  const {
-    row: kingRow,
-    col: kingCol
-  } = (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.getSquarePosition)(board, king);
-  const {
-    row: targetRow,
-    col: targetCol
-  } = (0,_helpers__WEBPACK_IMPORTED_MODULE_0__.getSquarePosition)(board, targetSquare);
-  if (kingRow === targetRow && kingCol === targetCol) {
-    return null; // King cannot move to its own square
+    // If there are still defenders left, white captures a black piece
+    if (whiteDefenders.length > 0) {
+      blackLostValue += blackAttackers.shift()?.value ?? 0;
+    }
   }
 
-  // Check if target square is adjacent to the king
-  const diffRow = Math.abs(kingRow - targetRow);
-  const diffCol = Math.abs(kingCol - targetCol);
-  if (diffRow === 1 && diffCol === 0 || diffRow === 0 && diffCol === 1 || diffRow === 1 && diffCol === 1) {
-    return king; // Target square is adjacent, king can move there
+  // Determine if black wins the exchange
+  if (whiteLostValue > blackLostValue) {
+    return {
+      winner: 'black',
+      diff: whiteLostValue - blackLostValue
+    };
+  } else if (whiteLostValue < blackLostValue) {
+    return {
+      winner: 'white',
+      diff: blackLostValue - whiteLostValue
+    };
+  } else {
+    return {
+      winner: 'null',
+      diff: 0
+    };
   }
-  return null; // Target square is not adjacent to the king
 };
 
 /***/ }),
@@ -3439,7 +3465,7 @@ if (true) {
 /******/ 	
 /******/ 	/* webpack/runtime/get update manifest filename */
 /******/ 	(() => {
-/******/ 		__webpack_require__.hmrF = () => ("hot/scripts_king." + __webpack_require__.h() + ".hot-update.json");
+/******/ 		__webpack_require__.hmrF = () => ("hot/scripts_simulate-exchange." + __webpack_require__.h() + ".hot-update.json");
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
@@ -3927,7 +3953,7 @@ if (true) {
 /******/ 		// object to store loaded and loading chunks
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
-/******/ 		var installedChunks = __webpack_require__.hmrS_css = __webpack_require__.hmrS_css || {"scripts/king":0};
+/******/ 		var installedChunks = __webpack_require__.hmrS_css = __webpack_require__.hmrS_css || {"scripts/simulate-exchange":0};
 /******/ 		
 /******/ 		var uniqueName = "blunder-watching";
 /******/ 		var loadCssChunkData = (target, link, chunkId) => {
@@ -4062,7 +4088,7 @@ if (true) {
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = __webpack_require__.hmrS_jsonp = __webpack_require__.hmrS_jsonp || {
-/******/ 			"scripts/king": 0
+/******/ 			"scripts/simulate-exchange": 0
 /******/ 		};
 /******/ 		
 /******/ 		// no chunk on demand loading
@@ -4576,8 +4602,8 @@ if (true) {
 /******/ 	// Load entry module and return exports
 /******/ 	__webpack_require__("./node_modules/webpack-dev-server/client/index.js?protocol=ws%3A&hostname=127.0.0.1&port=8080&pathname=%2Fws&logging=none&progress=false&overlay=%7B%22errors%22%3Afalse%2C%22warnings%22%3Afalse%7D&reconnect=10&hot=only&live-reload=true");
 /******/ 	__webpack_require__("./node_modules/webpack/hot/only-dev-server.js");
-/******/ 	var __webpack_exports__ = __webpack_require__("./scripts/utils/pieces/king.ts");
+/******/ 	var __webpack_exports__ = __webpack_require__("./scripts/utils/simulate-exchange.ts");
 /******/ 	
 /******/ })()
 ;
-//# sourceMappingURL=king.js.map
+//# sourceMappingURL=simulate-exchange.js.map

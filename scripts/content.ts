@@ -2,8 +2,14 @@ import { generateChessboard } from './utils/generate-chess-board';
 import { fileLetterToNumberMap } from './constants';
 import { calculateColor } from './utils/calculate-color';
 import { findStringDifference } from './utils/find-string-difference';
+import { simulateExchangeForWhite, simulateExchangeForBlack } from './utils/simulate-exchange';
 
 let selectedOption: 'white' | 'black' = 'white';
+
+const link = document.createElement('link');
+link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css';
+link.rel = 'stylesheet';
+document.head.appendChild(link);
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'selectedOption') {
@@ -45,7 +51,6 @@ function calculate(pieceMoved = '') {
     board.removeChild(childNode);
   });
 
-  // const _classString = pieceNodes.map(node => `${node.classList[1]}_${node.classList[2]}`).join('_');
   const _classString = pieceNodes.map(node => {
     const element = node as HTMLElement;
     return `${element.classList[1]}_${element.classList[2]}`;
@@ -93,16 +98,39 @@ function calculate(pieceMoved = '') {
 
     squareElements.forEach((squareElement) => {
       const children = squareElement?.querySelectorAll('.attackers-defenders');
+      const targetChildren = squareElement?.querySelectorAll('.target');
       children?.forEach((child) => {
         squareElement?.removeChild(child);
       });
 
+      targetChildren?.forEach((child) => {
+        squareElement?.removeChild(child);
+      });
+  
       if (squareElement) {
         const element = squareElement as HTMLElement;
         const color = calculateColor(square.attackers.length, square.defenders.length);
+  
+        let winnerOfExchange = {
+          winner: 'null',
+          diff: 0
+        };
+        if (selectedOption === 'white' && square.color === 'b' && square.defenders.length > 0 && square.attackers.length > 0) {
+          winnerOfExchange = simulateExchangeForWhite(square);
+        }
+        if (selectedOption === 'black' && square.color === 'w' && square.defenders.length > 0 && square.attackers.length > 0) {
+          winnerOfExchange = simulateExchangeForBlack(square);
+        }
+        
+        let isHanging = false;
+        if (selectedOption === 'white') {
+          isHanging = square.color === 'w' ? square.defenders.length === 0 : square.attackers.length === 0;
+        } else {
+          isHanging = square.color === 'b' ? square.defenders.length === 0 : square.attackers.length === 0;
+        }
+
         element.style.backgroundColor = color || '';
         element.style.opacity = '1';
-        // element.style.zIndex = '10';
         const childDiv = document.createElement('div');
         childDiv.classList.add('attackers-defenders');
         const childText = document.createElement('p');
@@ -110,7 +138,39 @@ function calculate(pieceMoved = '') {
         childDiv.style.padding = '2px';
         childText.innerText = `${square.defenders.length - square.attackers.length}`;
         childDiv.appendChild(childText);
+
         element.style.outline = '1px solid black';
+
+        if (isHanging) {
+          const iconClass = 'fa-solid fa-crosshairs'
+          const targetDiv = document.createElement('div');
+          const icon = document.createElement('i');
+          icon.style.color = 'black';
+          icon.style.zIndex = '1000';
+          icon.style.fontSize = '12px';
+          icon.style.padding = '4px';
+          targetDiv.style.position = 'absolute';
+          targetDiv.style.top = '0';
+          targetDiv.style.right = '0';
+          icon.className = iconClass;
+          targetDiv.classList.add('target')
+          targetDiv.appendChild(icon);
+          element.appendChild(targetDiv);
+        } else if (winnerOfExchange?.winner !== 'null' && winnerOfExchange.diff > 0) {
+          const targetDiv = document.createElement('div');
+          const childText = document.createElement('p');
+          targetDiv.classList.add('target')
+          targetDiv.style.fontSize = '12px'
+          targetDiv.style.position = 'absolute';
+          targetDiv.style.top = '0';
+          targetDiv.style.right = '0';
+          targetDiv.style.padding = '2px';
+          const prefix = selectedOption === winnerOfExchange.winner  ? '+' : '-'
+          childText.innerText = `${prefix}${winnerOfExchange.diff}`
+          targetDiv.appendChild(childText);
+          element.appendChild(targetDiv)
+        }
+
         element.appendChild(childDiv);
       }
     })
@@ -125,7 +185,6 @@ function calculate(pieceMoved = '') {
       children?.forEach((child) => {
         pieceMovedElement?.removeChild(child);
       });
-      // pieceMovedElement.style.zIndex = '10';
       pieceMovedElement.style.backgroundColor = 'transparent';
     }
   }
