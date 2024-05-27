@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "version": "1.0",
-  "name": "blunder-watching",
-  "description": "A chrome extension to watch blunders in your games",
+  "name": "Blunder Watching",
+  "description": "A chrome extension to watch blunders in your chess games",
   "icons": {
     "16": "icons/icon_16.png",
     "48": "icons/icon_48.png"
