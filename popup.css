@@ -1,0 +1,51 @@
+body {
+  background-color: whitesmoke;
+}
+
+.wrapper {
+  padding: 8px;
+  width: 300px;
+  border-radius: 8px;
+  h1,
+  h3 {
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 12px;
+  gap: 12px;
+}
+
+.label {
+  display: flex;
+  gap: 4px;
+  flex-direction: row;
+  align-items: center;
+  font-size: 14px;
+}
+
+.input {
+  height: 16px;
+  width: 16px;
+  margin: 0;
+  padding: 0;
+}
+
+.button {
+  padding: 8px 6px;
+  outline: none;
+  border: none;
+  font-size: 16px;
+  background-color: rgba(65, 120, 107, 1);
+  cursor: pointer;
+  color: whitesmoke;
+}
+
+.button:hover {
+  background-color: rgba(43, 101, 90, 1);
+  transition: 3000;
+}

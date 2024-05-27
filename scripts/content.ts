@@ -3,6 +3,10 @@ import { fileLetterToNumberMap } from './constants';
 import { calculateColor } from './utils/calculate-color';
 import { findStringDifference } from './utils/find-string-difference';
 import { simulateExchangeForWhite, simulateExchangeForBlack } from './utils/simulate-exchange';
+import { createEmptySquare } from './ui-helpers/create-empty-square';
+import { createHangingIcon } from './ui-helpers/create-hanging-icon';
+import { createSquareName } from './ui-helpers/create-square-name'
+import { createExchangeDiff } from './ui-helpers/create-exchange-diff';
 
 let selectedOption: 'white' | 'black' = 'white';
 
@@ -66,33 +70,7 @@ function calculate(pieceMoved = '') {
     const squareElements = document.querySelectorAll(selector);
 
     if (square.type === 'e') {
-      const color = calculateColor(square.attackers.length, square.defenders.length);
-      const emptySquare = document.createElement('div') as HTMLElement;
-      emptySquare.style.backgroundSize = '100%';
-      emptySquare.style.cursor = 'pointer'; // Setting multiple cursor styles for cross-browser compatibility
-      emptySquare.style.cursor = 'grab';
-      emptySquare.style.cursor = '-webkit-grab';
-      emptySquare.style.height = '12.5%';
-      emptySquare.style.left = '0';
-      emptySquare.style.overflow = 'hidden';
-      emptySquare.style.position = 'absolute';
-      emptySquare.style.top = '0';
-      emptySquare.style.touchAction = 'none';
-      emptySquare.style.width = '12.5%';
-      emptySquare.style.willChange = 'transform';
-      emptySquare.style.outline = '1px solid black';
-
-      emptySquare.style.backgroundColor = color || '';
-      emptySquare.classList.add('empty');
-      emptySquare.classList.add(`square-${fileLetterToNumberMap[file]}${rank}`);
-      const childDiv = document.createElement('div');
-      childDiv.classList.add('attackers-defenders');
-      const childText = document.createElement('p');
-      childText.style.fontSize = '12px';
-      childDiv.style.padding = '2px';
-      childText.innerText = `${square.defenders.length - square.attackers.length}`;
-      childDiv.appendChild(childText);
-      emptySquare.appendChild(childDiv);
+      const emptySquare = createEmptySquare(square)
       board.appendChild(emptySquare);
   }
 
@@ -142,35 +120,16 @@ function calculate(pieceMoved = '') {
         element.style.outline = '1px solid black';
 
         if (isHanging) {
-          const iconClass = 'fa-solid fa-crosshairs'
-          const targetDiv = document.createElement('div');
-          const icon = document.createElement('i');
-          icon.style.color = 'black';
-          icon.style.zIndex = '1000';
-          icon.style.fontSize = '12px';
-          icon.style.padding = '4px';
-          targetDiv.style.position = 'absolute';
-          targetDiv.style.top = '0';
-          targetDiv.style.right = '0';
-          icon.className = iconClass;
-          targetDiv.classList.add('target')
-          targetDiv.appendChild(icon);
-          element.appendChild(targetDiv);
+          const iconElement = createHangingIcon()
+          element.appendChild(iconElement)
         } else if (winnerOfExchange?.winner !== 'null' && winnerOfExchange.diff > 0) {
-          const targetDiv = document.createElement('div');
-          const childText = document.createElement('p');
-          targetDiv.classList.add('target')
-          targetDiv.style.fontSize = '12px'
-          targetDiv.style.position = 'absolute';
-          targetDiv.style.top = '0';
-          targetDiv.style.right = '0';
-          targetDiv.style.padding = '2px';
-          const prefix = selectedOption === winnerOfExchange.winner  ? '+' : '-'
-          childText.innerText = `${prefix}${winnerOfExchange.diff}`
-          targetDiv.appendChild(childText);
+          const targetDiv = createExchangeDiff(selectedOption, winnerOfExchange)
           element.appendChild(targetDiv)
         }
 
+
+        const squareNameDiv = createSquareName(square)
+        element.appendChild(squareNameDiv)
         element.appendChild(childDiv);
       }
     })

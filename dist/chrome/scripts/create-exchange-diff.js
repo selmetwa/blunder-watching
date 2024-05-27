@@ -1,95 +1,30 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./scripts/utils/simulate-exchange.ts":
-/*!********************************************!*\
-  !*** ./scripts/utils/simulate-exchange.ts ***!
-  \********************************************/
+/***/ "./scripts/ui-helpers/create-exchange-diff.ts":
+/*!****************************************************!*\
+  !*** ./scripts/ui-helpers/create-exchange-diff.ts ***!
+  \****************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   simulateExchangeForBlack: () => (/* binding */ simulateExchangeForBlack),
-/* harmony export */   simulateExchangeForWhite: () => (/* binding */ simulateExchangeForWhite)
+/* harmony export */   createExchangeDiff: () => (/* binding */ createExchangeDiff)
 /* harmony export */ });
-const simulateExchangeForWhite = square => {
-  // Clone and sort the attackers and defenders by value (ascending order)
-  let whiteAttackers = [...square.defenders].sort((a, b) => a.value - b.value) ?? [];
-  let blackDefenders = [...square.attackers].sort((a, b) => a.value - b.value) ?? [];
-
-  // Include the piece on the square in the defenders array
-  blackDefenders.unshift(square);
-  let whiteLostValue = 0;
-  let blackLostValue = 0;
-
-  // Simulate the exchange
-  while (whiteAttackers.length > 0 && blackDefenders.length > 0) {
-    // White captures a black piece
-    blackLostValue += blackDefenders.shift()?.value ?? 0;
-
-    // If there are still defenders left, black captures a white piece
-    if (blackDefenders.length > 0) {
-      whiteLostValue += whiteAttackers.shift()?.value ?? 0;
-    }
-  }
-
-  // Determine if white wins the exchange
-  if (blackLostValue > whiteLostValue) {
-    return {
-      winner: 'white',
-      diff: blackLostValue - whiteLostValue
-    };
-  } else if (blackLostValue < whiteLostValue) {
-    return {
-      winner: 'black',
-      diff: whiteLostValue - blackLostValue
-    };
-  } else {
-    return {
-      winner: 'null',
-      diff: 0
-    };
-  }
-};
-const simulateExchangeForBlack = square => {
-  // Clone and sort the attackers and defenders by value (ascending order)
-  let blackAttackers = [...square.defenders].sort((a, b) => a.value - b.value) ?? [];
-  let whiteDefenders = [...square.attackers].sort((a, b) => a.value - b.value) ?? [];
-
-  // Include the piece on the square in the defenders array
-  whiteDefenders.unshift(square);
-  let blackLostValue = 0;
-  let whiteLostValue = 0;
-
-  // Simulate the exchange
-  while (blackAttackers.length > 0 && whiteDefenders.length > 0) {
-    // Black captures a white piece
-    whiteLostValue += whiteDefenders.shift()?.value ?? 0;
-
-    // If there are still defenders left, white captures a black piece
-    if (whiteDefenders.length > 0) {
-      blackLostValue += blackAttackers.shift()?.value ?? 0;
-    }
-  }
-
-  // Determine if black wins the exchange
-  if (whiteLostValue > blackLostValue) {
-    return {
-      winner: 'black',
-      diff: whiteLostValue - blackLostValue
-    };
-  } else if (whiteLostValue < blackLostValue) {
-    return {
-      winner: 'white',
-      diff: blackLostValue - whiteLostValue
-    };
-  } else {
-    return {
-      winner: 'null',
-      diff: 0
-    };
-  }
+const createExchangeDiff = (selectedOption, winnerOfExchange) => {
+  const targetDiv = document.createElement('div');
+  const childText = document.createElement('p');
+  targetDiv.classList.add('target');
+  targetDiv.style.fontSize = '12px';
+  targetDiv.style.position = 'absolute';
+  targetDiv.style.top = '0';
+  targetDiv.style.right = '0';
+  targetDiv.style.padding = '2px';
+  const prefix = selectedOption === winnerOfExchange.winner ? '+' : '-';
+  childText.innerText = `${prefix}${winnerOfExchange.diff}`;
+  targetDiv.appendChild(childText);
+  return targetDiv;
 };
 
 /***/ }),
@@ -3465,7 +3400,7 @@ if (true) {
 /******/ 	
 /******/ 	/* webpack/runtime/get update manifest filename */
 /******/ 	(() => {
-/******/ 		__webpack_require__.hmrF = () => ("hot/scripts_simulate-exchange." + __webpack_require__.h() + ".hot-update.json");
+/******/ 		__webpack_require__.hmrF = () => ("hot/scripts_create-exchange-diff." + __webpack_require__.h() + ".hot-update.json");
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
@@ -3953,7 +3888,7 @@ if (true) {
 /******/ 		// object to store loaded and loading chunks
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
-/******/ 		var installedChunks = __webpack_require__.hmrS_css = __webpack_require__.hmrS_css || {"scripts/simulate-exchange":0};
+/******/ 		var installedChunks = __webpack_require__.hmrS_css = __webpack_require__.hmrS_css || {"scripts/create-exchange-diff":0};
 /******/ 		
 /******/ 		var uniqueName = "blunder-watching";
 /******/ 		var loadCssChunkData = (target, link, chunkId) => {
@@ -4088,7 +4023,7 @@ if (true) {
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = __webpack_require__.hmrS_jsonp = __webpack_require__.hmrS_jsonp || {
-/******/ 			"scripts/simulate-exchange": 0
+/******/ 			"scripts/create-exchange-diff": 0
 /******/ 		};
 /******/ 		
 /******/ 		// no chunk on demand loading
@@ -4602,8 +4537,8 @@ if (true) {
 /******/ 	// Load entry module and return exports
 /******/ 	__webpack_require__("./node_modules/webpack-dev-server/client/index.js?protocol=ws%3A&hostname=127.0.0.1&port=8080&pathname=%2Fws&logging=none&progress=false&overlay=%7B%22errors%22%3Afalse%2C%22warnings%22%3Afalse%7D&reconnect=10&hot=only&live-reload=true");
 /******/ 	__webpack_require__("./node_modules/webpack/hot/only-dev-server.js");
-/******/ 	var __webpack_exports__ = __webpack_require__("./scripts/utils/simulate-exchange.ts");
+/******/ 	var __webpack_exports__ = __webpack_require__("./scripts/ui-helpers/create-exchange-diff.ts");
 /******/ 	
 /******/ })()
 ;
-//# sourceMappingURL=simulate-exchange.js.map
+//# sourceMappingURL=create-exchange-diff.js.map

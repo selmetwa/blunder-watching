@@ -63,10 +63,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _utils_calculate_color__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utils/calculate-color */ "./scripts/utils/calculate-color.ts");
 /* harmony import */ var _utils_find_string_difference__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./utils/find-string-difference */ "./scripts/utils/find-string-difference.ts");
 /* harmony import */ var _utils_simulate_exchange__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./utils/simulate-exchange */ "./scripts/utils/simulate-exchange.ts");
+/* harmony import */ var _ui_helpers_create_empty_square__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ui-helpers/create-empty-square */ "./scripts/ui-helpers/create-empty-square.ts");
+/* harmony import */ var _ui_helpers_create_hanging_icon__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ui-helpers/create-hanging-icon */ "./scripts/ui-helpers/create-hanging-icon.ts");
+/* harmony import */ var _ui_helpers_create_square_name__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./ui-helpers/create-square-name */ "./scripts/ui-helpers/create-square-name.ts");
+/* harmony import */ var _ui_helpers_create_exchange_diff__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./ui-helpers/create-exchange-diff */ "./scripts/ui-helpers/create-exchange-diff.ts");
 if (true) {
   module.hot.accept();
 }
 ;
+
+
+
+
 
 
 
@@ -123,32 +131,7 @@ function calculate(pieceMoved = '') {
     const selector = `.square-${_constants__WEBPACK_IMPORTED_MODULE_1__.fileLetterToNumberMap[file]}${rank}`;
     const squareElements = document.querySelectorAll(selector);
     if (square.type === 'e') {
-      const color = (0,_utils_calculate_color__WEBPACK_IMPORTED_MODULE_2__.calculateColor)(square.attackers.length, square.defenders.length);
-      const emptySquare = document.createElement('div');
-      emptySquare.style.backgroundSize = '100%';
-      emptySquare.style.cursor = 'pointer'; // Setting multiple cursor styles for cross-browser compatibility
-      emptySquare.style.cursor = 'grab';
-      emptySquare.style.cursor = '-webkit-grab';
-      emptySquare.style.height = '12.5%';
-      emptySquare.style.left = '0';
-      emptySquare.style.overflow = 'hidden';
-      emptySquare.style.position = 'absolute';
-      emptySquare.style.top = '0';
-      emptySquare.style.touchAction = 'none';
-      emptySquare.style.width = '12.5%';
-      emptySquare.style.willChange = 'transform';
-      emptySquare.style.outline = '1px solid black';
-      emptySquare.style.backgroundColor = color || '';
-      emptySquare.classList.add('empty');
-      emptySquare.classList.add(`square-${_constants__WEBPACK_IMPORTED_MODULE_1__.fileLetterToNumberMap[file]}${rank}`);
-      const childDiv = document.createElement('div');
-      childDiv.classList.add('attackers-defenders');
-      const childText = document.createElement('p');
-      childText.style.fontSize = '12px';
-      childDiv.style.padding = '2px';
-      childText.innerText = `${square.defenders.length - square.attackers.length}`;
-      childDiv.appendChild(childText);
-      emptySquare.appendChild(childDiv);
+      const emptySquare = (0,_ui_helpers_create_empty_square__WEBPACK_IMPORTED_MODULE_5__.createEmptySquare)(square);
       board.appendChild(emptySquare);
     }
     squareElements.forEach(squareElement => {
@@ -190,34 +173,14 @@ function calculate(pieceMoved = '') {
         childDiv.appendChild(childText);
         element.style.outline = '1px solid black';
         if (isHanging) {
-          const iconClass = 'fa-solid fa-crosshairs';
-          const targetDiv = document.createElement('div');
-          const icon = document.createElement('i');
-          icon.style.color = 'black';
-          icon.style.zIndex = '1000';
-          icon.style.fontSize = '12px';
-          icon.style.padding = '4px';
-          targetDiv.style.position = 'absolute';
-          targetDiv.style.top = '0';
-          targetDiv.style.right = '0';
-          icon.className = iconClass;
-          targetDiv.classList.add('target');
-          targetDiv.appendChild(icon);
-          element.appendChild(targetDiv);
+          const iconElement = (0,_ui_helpers_create_hanging_icon__WEBPACK_IMPORTED_MODULE_6__.createHangingIcon)();
+          element.appendChild(iconElement);
         } else if (winnerOfExchange?.winner !== 'null' && winnerOfExchange.diff > 0) {
-          const targetDiv = document.createElement('div');
-          const childText = document.createElement('p');
-          targetDiv.classList.add('target');
-          targetDiv.style.fontSize = '12px';
-          targetDiv.style.position = 'absolute';
-          targetDiv.style.top = '0';
-          targetDiv.style.right = '0';
-          targetDiv.style.padding = '2px';
-          const prefix = selectedOption === winnerOfExchange.winner ? '+' : '-';
-          childText.innerText = `${prefix}${winnerOfExchange.diff}`;
-          targetDiv.appendChild(childText);
+          const targetDiv = (0,_ui_helpers_create_exchange_diff__WEBPACK_IMPORTED_MODULE_8__.createExchangeDiff)(selectedOption, winnerOfExchange);
           element.appendChild(targetDiv);
         }
+        const squareNameDiv = (0,_ui_helpers_create_square_name__WEBPACK_IMPORTED_MODULE_7__.createSquareName)(square);
+        element.appendChild(squareNameDiv);
         element.appendChild(childDiv);
       }
     });
@@ -276,6 +239,150 @@ if (board && board.childNodes) {
     });
   });
 }
+
+/***/ }),
+
+/***/ "./scripts/ui-helpers/create-empty-square.ts":
+/*!***************************************************!*\
+  !*** ./scripts/ui-helpers/create-empty-square.ts ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   createEmptySquare: () => (/* binding */ createEmptySquare)
+/* harmony export */ });
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../constants */ "./scripts/constants.ts");
+/* harmony import */ var _utils_calculate_color__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/calculate-color */ "./scripts/utils/calculate-color.ts");
+
+
+const createEmptySquare = square => {
+  const [file, rank] = square && square.square && square?.square?.split('') || [];
+  const color = (0,_utils_calculate_color__WEBPACK_IMPORTED_MODULE_1__.calculateColor)(square.attackers.length, square.defenders.length);
+  const emptySquare = document.createElement('div');
+  emptySquare.style.backgroundSize = '100%';
+  emptySquare.style.cursor = 'pointer';
+  emptySquare.style.cursor = 'grab';
+  emptySquare.style.cursor = '-webkit-grab';
+  emptySquare.style.height = '12.5%';
+  emptySquare.style.left = '0';
+  emptySquare.style.overflow = 'hidden';
+  emptySquare.style.position = 'absolute';
+  emptySquare.style.top = '0';
+  emptySquare.style.touchAction = 'none';
+  emptySquare.style.width = '12.5%';
+  emptySquare.style.willChange = 'transform';
+  emptySquare.style.outline = '1px solid black';
+  emptySquare.style.backgroundColor = color || '';
+  emptySquare.classList.add('empty');
+  emptySquare.classList.add(`square-${_constants__WEBPACK_IMPORTED_MODULE_0__.fileLetterToNumberMap[file]}${rank}`);
+  const childDiv = document.createElement('div');
+  childDiv.classList.add('attackers-defenders');
+  childDiv.style.padding = '2px';
+  const childText = document.createElement('p');
+  childText.style.fontSize = '12px';
+  childText.innerText = `${square.defenders.length - square.attackers.length}`;
+  childDiv.appendChild(childText);
+  emptySquare.appendChild(childDiv);
+  const squareNameDiv = document.createElement('div');
+  squareNameDiv.classList.add('target');
+  const squareNameText = document.createElement('p');
+  squareNameText.textContent = `${square.square}`;
+  squareNameText.style.fontSize = '11px';
+  squareNameDiv.style.position = 'absolute';
+  squareNameDiv.style.bottom = '0';
+  squareNameDiv.style.right = '0';
+  squareNameDiv.style.padding = '2px';
+  squareNameDiv.appendChild(squareNameText);
+  emptySquare.appendChild(squareNameDiv);
+  return emptySquare;
+};
+
+/***/ }),
+
+/***/ "./scripts/ui-helpers/create-exchange-diff.ts":
+/*!****************************************************!*\
+  !*** ./scripts/ui-helpers/create-exchange-diff.ts ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   createExchangeDiff: () => (/* binding */ createExchangeDiff)
+/* harmony export */ });
+const createExchangeDiff = (selectedOption, winnerOfExchange) => {
+  const targetDiv = document.createElement('div');
+  const childText = document.createElement('p');
+  targetDiv.classList.add('target');
+  targetDiv.style.fontSize = '12px';
+  targetDiv.style.position = 'absolute';
+  targetDiv.style.top = '0';
+  targetDiv.style.right = '0';
+  targetDiv.style.padding = '2px';
+  const prefix = selectedOption === winnerOfExchange.winner ? '+' : '-';
+  childText.innerText = `${prefix}${winnerOfExchange.diff}`;
+  targetDiv.appendChild(childText);
+  return targetDiv;
+};
+
+/***/ }),
+
+/***/ "./scripts/ui-helpers/create-hanging-icon.ts":
+/*!***************************************************!*\
+  !*** ./scripts/ui-helpers/create-hanging-icon.ts ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   createHangingIcon: () => (/* binding */ createHangingIcon)
+/* harmony export */ });
+const createHangingIcon = () => {
+  const iconClass = 'fa-solid fa-crosshairs';
+  const iconElement = document.createElement('div');
+  const icon = document.createElement('i');
+  icon.style.color = 'black';
+  icon.style.zIndex = '1000';
+  icon.style.fontSize = '12px';
+  icon.style.padding = '4px';
+  iconElement.style.position = 'absolute';
+  iconElement.style.top = '0';
+  iconElement.style.right = '0';
+  icon.className = iconClass;
+  iconElement.classList.add('target');
+  iconElement.appendChild(icon);
+  return iconElement;
+};
+
+/***/ }),
+
+/***/ "./scripts/ui-helpers/create-square-name.ts":
+/*!**************************************************!*\
+  !*** ./scripts/ui-helpers/create-square-name.ts ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   createSquareName: () => (/* binding */ createSquareName)
+/* harmony export */ });
+const createSquareName = square => {
+  const squareNameDiv = document.createElement('div');
+  squareNameDiv.classList.add('target');
+  const squareNameText = document.createElement('p');
+  squareNameText.textContent = `${square.square}`;
+  squareNameText.style.fontSize = '11px';
+  squareNameDiv.style.position = 'absolute';
+  squareNameDiv.style.bottom = '0';
+  squareNameDiv.style.right = '0';
+  squareNameDiv.style.padding = '2px';
+  squareNameDiv.appendChild(squareNameText);
+  return squareNameDiv;
+};
 
 /***/ }),
 
@@ -4312,7 +4419,7 @@ if (true) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("32f2aef19237606853a9")
+/******/ 		__webpack_require__.h = () => ("a0a6a343d8d010769d60")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */

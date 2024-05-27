@@ -1,94 +1,136 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./scripts/utils/simulate-exchange.ts":
-/*!********************************************!*\
-  !*** ./scripts/utils/simulate-exchange.ts ***!
-  \********************************************/
+/***/ "./scripts/constants.ts":
+/*!******************************!*\
+  !*** ./scripts/constants.ts ***!
+  \******************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   simulateExchangeForBlack: () => (/* binding */ simulateExchangeForBlack),
-/* harmony export */   simulateExchangeForWhite: () => (/* binding */ simulateExchangeForWhite)
+/* harmony export */   allPossiblePieces: () => (/* binding */ allPossiblePieces),
+/* harmony export */   allSquares: () => (/* binding */ allSquares),
+/* harmony export */   fileLetterToNumberMap: () => (/* binding */ fileLetterToNumberMap),
+/* harmony export */   fileNumberToLetterMap: () => (/* binding */ fileNumberToLetterMap),
+/* harmony export */   pieceValues: () => (/* binding */ pieceValues)
 /* harmony export */ });
-const simulateExchangeForWhite = square => {
-  // Clone and sort the attackers and defenders by value (ascending order)
-  let whiteAttackers = [...square.defenders].sort((a, b) => a.value - b.value) ?? [];
-  let blackDefenders = [...square.attackers].sort((a, b) => a.value - b.value) ?? [];
-
-  // Include the piece on the square in the defenders array
-  blackDefenders.unshift(square);
-  let whiteLostValue = 0;
-  let blackLostValue = 0;
-
-  // Simulate the exchange
-  while (whiteAttackers.length > 0 && blackDefenders.length > 0) {
-    // White captures a black piece
-    blackLostValue += blackDefenders.shift()?.value ?? 0;
-
-    // If there are still defenders left, black captures a white piece
-    if (blackDefenders.length > 0) {
-      whiteLostValue += whiteAttackers.shift()?.value ?? 0;
-    }
-  }
-
-  // Determine if white wins the exchange
-  if (blackLostValue > whiteLostValue) {
-    return {
-      winner: 'white',
-      diff: blackLostValue - whiteLostValue
-    };
-  } else if (blackLostValue < whiteLostValue) {
-    return {
-      winner: 'black',
-      diff: whiteLostValue - blackLostValue
-    };
-  } else {
-    return {
-      winner: 'null',
-      diff: 0
-    };
-  }
+const allSquares = ['a1', 'b1', 'c1', 'd1', 'e1', 'f1', 'g1', 'h1', 'a2', 'b2', 'c2', 'd2', 'e2', 'f2', 'g2', 'h2', 'a3', 'b3', 'c3', 'd3', 'e3', 'f3', 'g3', 'h3', 'a4', 'b4', 'c4', 'd4', 'e4', 'f4', 'g4', 'h4', 'a5', 'b5', 'c5', 'd5', 'e5', 'f5', 'g5', 'h5', 'a6', 'b6', 'c6', 'd6', 'e6', 'f6', 'g6', 'h6', 'a7', 'b7', 'c7', 'd7', 'e7', 'f7', 'g7', 'h7', 'a8', 'b8', 'c8', 'd8', 'e8', 'f8', 'g8', 'h8'];
+const allPossiblePieces = ['bk', 'bq', 'br', 'bb', 'bn', 'bp', 'wk', 'wq', 'wr', 'wb', 'wn', 'wp'];
+const pieceValues = {
+  'e': 0,
+  'p': 1,
+  'n': 3,
+  'b': 3,
+  'r': 5,
+  'q': 9,
+  'k': 10
 };
-const simulateExchangeForBlack = square => {
-  // Clone and sort the attackers and defenders by value (ascending order)
-  let blackAttackers = [...square.defenders].sort((a, b) => a.value - b.value) ?? [];
-  let whiteDefenders = [...square.attackers].sort((a, b) => a.value - b.value) ?? [];
+const fileNumberToLetterMap = {
+  1: 'a',
+  2: 'b',
+  3: 'c',
+  4: 'd',
+  5: 'e',
+  6: 'f',
+  7: 'g',
+  8: 'h'
+};
+const fileLetterToNumberMap = {
+  'a': 1,
+  'b': 2,
+  'c': 3,
+  'd': 4,
+  'e': 5,
+  'f': 6,
+  'g': 7,
+  'h': 8
+};
 
-  // Include the piece on the square in the defenders array
-  whiteDefenders.unshift(square);
-  let blackLostValue = 0;
-  let whiteLostValue = 0;
+/***/ }),
 
-  // Simulate the exchange
-  while (blackAttackers.length > 0 && whiteDefenders.length > 0) {
-    // Black captures a white piece
-    whiteLostValue += whiteDefenders.shift()?.value ?? 0;
+/***/ "./scripts/ui-helpers/create-empty-square.ts":
+/*!***************************************************!*\
+  !*** ./scripts/ui-helpers/create-empty-square.ts ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-    // If there are still defenders left, white captures a black piece
-    if (whiteDefenders.length > 0) {
-      blackLostValue += blackAttackers.shift()?.value ?? 0;
-    }
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   createEmptySquare: () => (/* binding */ createEmptySquare)
+/* harmony export */ });
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../constants */ "./scripts/constants.ts");
+/* harmony import */ var _utils_calculate_color__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/calculate-color */ "./scripts/utils/calculate-color.ts");
+
+
+const createEmptySquare = square => {
+  const [file, rank] = square && square.square && square?.square?.split('') || [];
+  const color = (0,_utils_calculate_color__WEBPACK_IMPORTED_MODULE_1__.calculateColor)(square.attackers.length, square.defenders.length);
+  const emptySquare = document.createElement('div');
+  emptySquare.style.backgroundSize = '100%';
+  emptySquare.style.cursor = 'pointer';
+  emptySquare.style.cursor = 'grab';
+  emptySquare.style.cursor = '-webkit-grab';
+  emptySquare.style.height = '12.5%';
+  emptySquare.style.left = '0';
+  emptySquare.style.overflow = 'hidden';
+  emptySquare.style.position = 'absolute';
+  emptySquare.style.top = '0';
+  emptySquare.style.touchAction = 'none';
+  emptySquare.style.width = '12.5%';
+  emptySquare.style.willChange = 'transform';
+  emptySquare.style.outline = '1px solid black';
+  emptySquare.style.backgroundColor = color || '';
+  emptySquare.classList.add('empty');
+  emptySquare.classList.add(`square-${_constants__WEBPACK_IMPORTED_MODULE_0__.fileLetterToNumberMap[file]}${rank}`);
+  const childDiv = document.createElement('div');
+  childDiv.classList.add('attackers-defenders');
+  childDiv.style.padding = '2px';
+  const childText = document.createElement('p');
+  childText.style.fontSize = '12px';
+  childText.innerText = `${square.defenders.length - square.attackers.length}`;
+  childDiv.appendChild(childText);
+  emptySquare.appendChild(childDiv);
+  const squareNameDiv = document.createElement('div');
+  squareNameDiv.classList.add('target');
+  const squareNameText = document.createElement('p');
+  squareNameText.textContent = `${square.square}`;
+  squareNameText.style.fontSize = '11px';
+  squareNameDiv.style.position = 'absolute';
+  squareNameDiv.style.bottom = '0';
+  squareNameDiv.style.right = '0';
+  squareNameDiv.style.padding = '2px';
+  squareNameDiv.appendChild(squareNameText);
+  emptySquare.appendChild(squareNameDiv);
+  return emptySquare;
+};
+
+/***/ }),
+
+/***/ "./scripts/utils/calculate-color.ts":
+/*!******************************************!*\
+  !*** ./scripts/utils/calculate-color.ts ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   calculateColor: () => (/* binding */ calculateColor)
+/* harmony export */ });
+const calculateColor = (attackers, defenders) => {
+  const reds = ['rgba(197, 150, 151, 1)', 'rgba(190, 137, 137, 1)', 'rgba(183, 123, 123, 1)', 'rgba(175, 110, 110, 1)', 'rgba(168, 97, 97, 1)', 'rgba(158, 87, 87, 1)', 'rgba(151, 74, 74, 1)', 'rgba(144, 61, 61, 1)'];
+  const greens = ['rgba(151, 196, 175, 1)', 'rgba(129, 177, 158, 1)', 'rgba(108, 158, 141, 1)', 'rgba(86, 139, 124, 1)', 'rgba(65, 120, 107, 1)', 'rgba(43, 101, 90, 1)', 'rgba(22, 82, 73, 1)', 'rgba(0, 63, 56, 1)'];
+  if (attackers === defenders) {
+    return 'rgba(201, 240, 255, 1)'; // make this blue
   }
-
-  // Determine if black wins the exchange
-  if (whiteLostValue > blackLostValue) {
-    return {
-      winner: 'black',
-      diff: whiteLostValue - blackLostValue
-    };
-  } else if (whiteLostValue < blackLostValue) {
-    return {
-      winner: 'white',
-      diff: blackLostValue - whiteLostValue
-    };
-  } else {
-    return {
-      winner: 'null',
-      diff: 0
-    };
+  if (attackers > defenders) {
+    return reds[attackers - defenders - 1];
+  }
+  if (defenders > attackers) {
+    return greens[defenders - attackers - 1];
   }
 };
 
@@ -3465,7 +3507,7 @@ if (true) {
 /******/ 	
 /******/ 	/* webpack/runtime/get update manifest filename */
 /******/ 	(() => {
-/******/ 		__webpack_require__.hmrF = () => ("hot/scripts_simulate-exchange." + __webpack_require__.h() + ".hot-update.json");
+/******/ 		__webpack_require__.hmrF = () => ("hot/scripts_create-empty-square." + __webpack_require__.h() + ".hot-update.json");
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
@@ -3953,7 +3995,7 @@ if (true) {
 /******/ 		// object to store loaded and loading chunks
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
-/******/ 		var installedChunks = __webpack_require__.hmrS_css = __webpack_require__.hmrS_css || {"scripts/simulate-exchange":0};
+/******/ 		var installedChunks = __webpack_require__.hmrS_css = __webpack_require__.hmrS_css || {"scripts/create-empty-square":0};
 /******/ 		
 /******/ 		var uniqueName = "blunder-watching";
 /******/ 		var loadCssChunkData = (target, link, chunkId) => {
@@ -4088,7 +4130,7 @@ if (true) {
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = __webpack_require__.hmrS_jsonp = __webpack_require__.hmrS_jsonp || {
-/******/ 			"scripts/simulate-exchange": 0
+/******/ 			"scripts/create-empty-square": 0
 /******/ 		};
 /******/ 		
 /******/ 		// no chunk on demand loading
@@ -4602,8 +4644,8 @@ if (true) {
 /******/ 	// Load entry module and return exports
 /******/ 	__webpack_require__("./node_modules/webpack-dev-server/client/index.js?protocol=ws%3A&hostname=127.0.0.1&port=8080&pathname=%2Fws&logging=none&progress=false&overlay=%7B%22errors%22%3Afalse%2C%22warnings%22%3Afalse%7D&reconnect=10&hot=only&live-reload=true");
 /******/ 	__webpack_require__("./node_modules/webpack/hot/only-dev-server.js");
-/******/ 	var __webpack_exports__ = __webpack_require__("./scripts/utils/simulate-exchange.ts");
+/******/ 	var __webpack_exports__ = __webpack_require__("./scripts/ui-helpers/create-empty-square.ts");
 /******/ 	
 /******/ })()
 ;
-//# sourceMappingURL=simulate-exchange.js.map
+//# sourceMappingURL=create-empty-square.js.map
