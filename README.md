@@ -1,8 +1,10 @@
-# blunder-watching
+# Blunder Watching
 
 ## Screenshots
-<img width="600" alt="Screenshot 2024-05-19 at 10 51 13 PM" src="https://github.com/selmetwa/blunder-watching/assets/46908343/264d241b-b97a-4164-9965-85d4eaaab739">
-<img width="600" alt="Screenshot 2024-05-19 at 10 53 08 PM" src="https://github.com/selmetwa/blunder-watching/assets/46908343/62d61ee1-deea-44c9-b369-dfbb3b951c89">
+<img width="600" alt="Screenshot 2024-05-26 at 9 33 42 PM" src="https://github.com/selmetwa/blunder-watching/assets/46908343/4f26a25b-edbb-4fb8-94bc-4c8396da6b9e">
+<img width="600" alt="Screenshot 2024-05-26 at 9 37 13 PM" src="https://github.com/selmetwa/blunder-watching/assets/46908343/0bdfa489-2d56-4010-abbf-3ea711d6d1ff">
+
+![blunder-watching-vid_HgKhCHbB](https://github.com/selmetwa/blunder-watching/assets/46908343/57139a6e-b076-467b-a207-d5accc782696)
 
 > This project was bootstrapped using the Extension TypeScript template.
 
