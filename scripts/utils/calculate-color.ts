@@ -22,7 +22,7 @@ export const calculateColor = (attackers: number, defenders: number) => {
   ]
 
   if (attackers === defenders) {
-    return 'rgba(201, 240, 255, 1)'; // make this blue
+    return 'rgba(201, 240, 255, 1)';
   }
 
   if (attackers > defenders) {

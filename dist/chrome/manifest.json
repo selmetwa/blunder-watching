@@ -7,9 +7,6 @@
     "16": "icons/icon_16.png",
     "48": "icons/icon_48.png"
   },
-  "chrome_url_overrides": {
-    "newtab": "chrome_url_overrides/newtab.html"
-  },
   "action": {
     "default_popup": "action/default_popup.html"
   },
@@ -27,23 +24,11 @@
   "web_accessible_resources": [
     {
       "resources": [
-        "web_accessible_resources/*",
-        "/*.json",
-        "/*.js",
-        "/*.css"
+        "web_accessible_resources/*"
       ],
       "matches": [
         "<all_urls>"
       ]
     }
-  ],
-  "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; "
-  },
-  "permissions": [
-    "scripting"
-  ],
-  "background": {
-    "service_worker": "background/service_worker.js"
-  }
+  ]
 }

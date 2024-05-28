@@ -8,6 +8,7 @@
     "start": "extension start",
     "build": "extension build"
   },
+  "type": "module",
   "dependencies": {},
   "name": "blunder-watching",
   "private": true,
