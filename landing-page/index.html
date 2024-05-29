@@ -7,12 +7,83 @@
   <meta name="author" content="">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
 
   <link href="styles/index.css" rel="stylesheet">
+  <link href="styles/reset.css" rel="stylesheet">
 </head>
 
 <body>
-  <p>Hello, world!</p>
+  <main class="content">
+    <header>
+      <h1 class="title">Blunder Watching</h1>
+      <p class="description">
+        Blunder Watching is a Chrome extension designed to aid chess players in evaluating their positions on the board. This extension automatically calculates attackers and defenders for each piece, identifies hanging pieces, and assesses whether you can gain
+        material in exchanges.
+      </p>
+    </header>
+    <section class="section features">
+      <h2 class="features_title">Features</h2>
+      <ol class="features_list" style="list-style-type: none">
+        <li class="features_list_item">
+          <h3>
+            <span>&#9823</span> Attackers and Defenders Calculation:
+          </h3>
+          <ul>
+            <li>The extension visually displays the number of attackers and defenders for each piece on the board.</li>
+            <li>Positive numbers indicate defenders, while negative numbers indicate attackers.</li>
+          </ul>
+        </li>
+        <li class="features_list_item">
+          <h3>
+            <span>&#9822</span> Hanging Pieces Identification:
+          </h3>
+          <ul>
+            <li>Pieces that are undefended (hanging) are indicated by a <em>target icon,</em> allowing you to quickly spot vulnerabilities in your position.</li>
+          </ul>
+        </li>
+        <li class="features_list_item">
+          <h3>
+            <span>&#9821</span> Material Gain Analysis:
+          </h3>
+          <ul>
+            <li>Blunder Watching evaluates potential exchanges and determines if you can win material.</li>
+          </ul>
+        </li>
+        <li class="features_list_item">
+          <h3>
+            <span>&#9820</span> Interface:
+          </h3>
+          <ul>
+            <li>The extension overlays information directly onto the board for easy reference.</li>
+            <li>Colors and symbols are used to represent different states and values for quick visual recognition.</li>
+          </ul>
+        </li>
+        <li class="features_list_item">
+          <h3>
+            <span>&#9819</span> Real-Time Updates:
+          </h3>
+          <ul>
+            <li>The extension updates in real-time as you make moves, ensuring that you always have the latest information at your fingertips.</li>
+          </ul>
+        </li>
+      </ol>
+    </section>
+    <section class="section screenshots">
+      <div class="images">
+        <img src="./images/one.png" alt="starting position" class="image" />
+        <img src="./images/two.png" alt="middle position" class="image" />
+        <img src="./images/three.png" alt="middle position" class="image" />
+        <img src="./images/fourth.png" alt="ending position" class="image" />
+      </div>
+    </section>
+    <footer class="footer">
+      <h2>Built by Sherif Elmetwally</h2>
+      <a href="https://github.com/selmetwa/blunder-watching">Source Code</a>
+    </footer>
+  </main>
 </body>
 
 </html>

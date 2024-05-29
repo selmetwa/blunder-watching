@@ -1,0 +1,178 @@
+:root {
+  --blue1: rgba(201, 240, 255, 1);
+  --green1: rgba(151, 196, 175, 0.5);
+  --green2: rgba(129, 177, 158, 1);
+  --green3: rgba(108, 158, 141, 1);
+  --green4: rgba(86, 139, 124, 1);
+  --black1: #1C1D21;
+  --black2: #383A42;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: var(--green1);
+}
+
+.content {
+  padding: 60px 20px;
+  background-color: var(--green2);
+  min-height: 100%;
+  width: 100%;
+  text-align: left;
+  font-family: "DM Sans", sans-serif;
+}
+
+.title {
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: normal;
+  font-size: 32px;
+  color: var(--black1);
+}
+
+.description {
+  font-weight: 500;
+  color: var(--black2);
+  text-wrap: balance;
+  font-size: 18px;
+}
+
+@media (min-width: 768px) {
+  .content {
+    max-width: 900px;
+    outline: 2px solid var(--green4);
+    padding: 60px 40px;
+    text-align: center;
+  }
+  .title {
+    font-size: 64px;
+  }
+  .description {
+    padding: 0 80px;
+    font-size: 24px;
+  }
+}
+
+.section {
+  margin-top: 24px;
+  color: var(--black1);
+  text-align: left;
+}
+
+.features {
+  .features_title {
+    font-size: 24px;
+  }
+}
+
+.features_list {
+  padding-left: 0;
+  margin-left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 8px;
+  list-style-position: inside;
+}
+
+.features_list_item {
+  font-size: 20px;
+  font-weight: 500;
+  >h3 {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    font-size: 18px;
+    align-items: center;
+  }
+}
+
+ul {
+  padding-left: 4px;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-left: 4px;
+  list-style-position: inside;
+  position: relative;
+  /* Set relative position for the ::before element */
+  padding-left: 1em;
+  /* Add space for the custom marker */
+  >li {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--black2);
+  }
+}
+
+ul li::before {
+  position: absolute;
+  left: 0;
+  width: 1.5em;
+  text-align: center;
+}
+
+ul li:nth-child(1)::before {
+  content: "\265F";
+}
+
+ul li:nth-child(2)::before {
+  content: "\265E";
+}
+
+ul li:nth-child(3)::before {
+  content: "\265C";
+}
+
+@media (min-width: 768px) {
+  .features_list_item {
+    font-size: 24px;
+    >h3 {
+      font-size: 22px;
+    }
+  }
+  ul {
+    >li {
+      font-size: 18px;
+    }
+  }
+}
+
+.footer {
+  padding: 50px 50px;
+  background-color: var(--green4);
+  margin-top: 60px;
+  margin-left: -20px;
+  margin-right: -20px;
+  margin-bottom: -60px;
+  >h2 {
+    color: var(--black1);
+  }
+  >a {
+    color: var(--black2);
+  }
+}
+
+@media (min-width: 768px) {
+  .footer {
+    margin-left: -40px;
+    margin-right: -40px;
+  }
+}
+
+.images {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.image {
+  border: 2px solid var(--green4)
+}

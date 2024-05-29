@@ -9,7 +9,7 @@ Blunder Watching is a Chrome extension designed to aid chess players in evaluati
    - The extension visually displays the number of attackers and defenders for each piece on the board.
    - Positive numbers indicate defenders, while negative numbers indicate attackers.
 2. Hanging Pieces Identification:
-  - Pieces that are undefended (hanging) are highlighted, allowing you to quickly spot vulnerabilities in your position.
+  - Pieces that are undefended (hanging) are indicated by a target icon, allowing you to quickly spot vulnerabilities in your position.
 3. Material Gain Analysis:
   - Blunder Watching evaluates potential exchanges and determines if you can win material.
 4. Interface:
