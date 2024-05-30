@@ -35,8 +35,9 @@ Squares with the target icon indicate hanging pieces.
 ![blunder-watching-vid_HgKhCHbB](https://github.com/selmetwa/blunder-watching/assets/46908343/57139a6e-b076-467b-a207-d5accc782696)
 
 
-## Scripts Available
+## Run Locally
 
+Clone repo, run NPM install with node 20
 In the project directory, you can run:
 
 ### npm dev
