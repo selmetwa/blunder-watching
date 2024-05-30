@@ -4,8 +4,11 @@
   --green2: rgba(129, 177, 158, 1);
   --green3: rgba(108, 158, 141, 1);
   --green4: rgba(86, 139, 124, 1);
+  --green5: rgba(65, 120, 107, 1);
+  --green6: rgba(43, 101, 90, 1);
   --black1: #1C1D21;
   --black2: #383A42;
+  --red1: rgba(168, 97, 97, 1);
 }
 
 html {
@@ -43,6 +46,21 @@ body {
   font-size: 18px;
 }
 
+.cta_button {
+  margin: 16px auto;
+  display: block;
+  padding: 12px 8px;
+  text-align: center;
+  width: 75%;
+  border-radius: 4px;
+  background-color: var(--green4);
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 18px;
+  border: 2px solid var(--green5);
+}
+
 @media (min-width: 768px) {
   .content {
     max-width: 900px;
@@ -57,6 +75,14 @@ body {
     padding: 0 80px;
     font-size: 24px;
   }
+  .cta_button {
+    width: 25%;
+    transition: all 300ms;
+  }
+  .cta_button:hover {
+    background-color: var(--green5);
+    border-color: var(--green6);
+  }
 }
 
 .section {
@@ -69,6 +95,16 @@ body {
   .features_title {
     font-size: 24px;
   }
+}
+
+.disclaimer {
+  color: var(--black2);
+  margin-top: 6px;
+  margin-bottom: 6px;
+  text-decoration: underline;
+  font-weight: 500;
+  font-size: 18px;
+  text-decoration-color: var(--red1);
 }
 
 .features_list {
