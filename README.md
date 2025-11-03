@@ -1,5 +1,11 @@
 # Blunder Watching
-## Blunder Watching: Chrome Extension for Chess.com
+
+<p>
+  <img src="https://github.com/selmetwa/blunder-watching/assets/46908343/4f26a25b-edbb-4fb8-94bc-4c8396da6b9e" width="300" />
+  <img src="https://github.com/selmetwa/blunder-watching/assets/46908343/0bdfa489-2d56-4010-abbf-3ea711d6d1ff" width="300" />
+  <img src="https://github.com/selmetwa/blunder-watching/assets/46908343/57139a6e-b076-467b-a207-d5accc782696" width="300" />
+</p>
+
 
 **Overview:**
 Blunder Watching is a Chrome extension designed to aid chess players in evaluating their positions on the board. This extension automatically calculates attackers and defenders for each piece, identifies hanging pieces, and assesses whether you can gain material in exchanges.
@@ -28,12 +34,6 @@ Each square displays a numerical value representing the balance of attackers and
 Negative values indicate that the piece on that square is being attacked by more enemy pieces than it is defended by friendly pieces.
 Positive values indicate that the piece is well-defended.
 Squares with the target icon indicate hanging pieces.
-
-<img width="600" alt="Screenshot 2024-05-26 at 9 33 42 PM" src="https://github.com/selmetwa/blunder-watching/assets/46908343/4f26a25b-edbb-4fb8-94bc-4c8396da6b9e">
-<img width="600" alt="Screenshot 2024-05-26 at 9 37 13 PM" src="https://github.com/selmetwa/blunder-watching/assets/46908343/0bdfa489-2d56-4010-abbf-3ea711d6d1ff">
-
-![blunder-watching-vid_HgKhCHbB](https://github.com/selmetwa/blunder-watching/assets/46908343/57139a6e-b076-467b-a207-d5accc782696)
-
 
 ## Run Locally
 
